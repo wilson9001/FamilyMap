@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">Family Map</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="serverHostLabel">Server Host</string>
+    <string name="serverPortLabel">Server Port</string>
+    <string name="userNameLabel">User Name</string>
+    <string name="passwordLabel">Password</string>
+    <string name="firstNameLabel">First Name</string>
+    <string name="lastNameLabel">Last Name</string>
+    <string name="emailLabel">Email</string>
+    <string name="genderLabel">Gender</string>
+    <string name="maleRadioButtonLabel">Male</string>
+    <string name="femaleRadioButtonLabel">Female</string>
+    <string name="signInButtonText">SIGN IN</string>
+    <string name="registerButtonText">REGISTER</string>
+    <string name="signInFailedText">Sign in failed!</string>
+    <string name="maleConst">m</string>
+    <string name="femaleConst">f</string>
+    <string name="title_activity_maps">Map</string>
+</resources>
