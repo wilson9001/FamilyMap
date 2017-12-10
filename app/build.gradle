@@ -5,7 +5,7 @@ android {
     buildToolsVersion "27.0.0"
     defaultConfig {
         applicationId "a240.familymap"
-        minSdkVersion 24
+        minSdkVersion 23
         targetSdkVersion 26
         versionCode 1
         versionName "1.0"
@@ -37,5 +37,7 @@ dependencies {
     compile 'com.joanzapata.iconify:android-iconify-weathericons:2.2.2' // (v2.0)
     compile 'com.joanzapata.iconify:android-iconify-simplelineicons:2.2.2' // (v1.0.0)
     compile 'com.joanzapata.iconify:android-iconify-ionicons:2.2.2' // (v2.0.1)
+    //compile 'com.google.common.collect.ComparisonChain'
+    //compile 'com.google.guava:guava:23.5-android'
     testCompile 'junit:junit:4.12'
 }

@@ -4,6 +4,8 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
 
+//import com.google.common.collect.ComparisonChain;
+
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -217,15 +219,25 @@ public class SyncTask extends AsyncTask</*String*/Boolean, Void, /*Pair<List<Per
                // eventIDToEvents.put(event.getEventID(), event);
             }
 
-            Set<String> personIDs = PersonIDToEvents.keySet();
+            /*Set<String> personIDs = PersonIDToEvents.keySet();
             ArrayList<EventModel> eventsForPerson;
+
+            Comparator eventComparator = new Comparator<EventModel>()
+            {
+                @Override
+                public int compare(EventModel e1, EventModel e2)
+                {
+                    return ComparisonChain.start().compare(e1.getYear(), e2.getYear()).compare(e1.getEventType(), e2.getEventType()).result();
+                }
+            };
 
             for(String personID : personIDs)
             {
                 eventsForPerson = (ArrayList<EventModel>) PersonIDToEvents.get(personID);
 
-                Collections.sort(eventsForPerson, Comparator.comparing(EventModel::getYear).thenComparing(EventModel::getEventType));
-            }
+                //Collections.sort(eventsForPerson, Comparator.comparing(EventModel::getYear).thenComparing(EventModel::getEventType));
+                Collections.sort(eventsForPerson, eventComparator);
+            }*/
 
             appData.setEventTypeColor(new HashMap<String, Float>());
             HashMap<String, Float> eventTypeToFloat = appData.getEventTypeColor();
