@@ -9,6 +9,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -43,6 +45,7 @@ import a240.familymap.R;
 public class MainActivity extends AppCompatActivity implements Login.OnFragmentInteractionListener, test.OnFragmentInteractionListener, OnMapReadyCallback, GoogleMap.OnMarkerClickListener /*, LoginTask.Context, SyncTask.Context*/
 {
     private test mapFragment;
+    private boolean isMapFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -58,8 +61,32 @@ public class MainActivity extends AppCompatActivity implements Login.OnFragmentI
         {
             fragment = new Login();
 
+            isMapFragment = false;
+
             fragmentManager.beginTransaction().add(R.id.fragmentContainer, fragment).commit();
+
+            invalidateOptionsMenu();
         }
+
+        isMapFragment = true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu)
+    {
+        if(isMapFragment)
+        {
+            menu.add(0,R.id.search_menuItem, 0,"");
+            menu.add(0,R.id.filter_menuItem, 1,"");
+            menu.add(0,R.id.settings_menuItem, 2,"");
+        }
+        else
+        {
+            menu.removeItem(R.id.filter_menuItem);
+            menu.removeItem(R.id.search_menuItem);
+            menu.removeItem(R.id.settings_menuItem);
+        }
+        return true;
     }
 
     @Override
@@ -74,7 +101,11 @@ public class MainActivity extends AppCompatActivity implements Login.OnFragmentI
 
         fragmentTransaction.addToBackStack("first");
 
+        isMapFragment = true;
+
         fragmentTransaction.commit();
+
+        invalidateOptionsMenu();
     }
 
     @Override
@@ -168,5 +199,17 @@ public class MainActivity extends AppCompatActivity implements Login.OnFragmentI
 
         eventInfo.setText(eventInfoBuilder.toString());
         return false;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+       // super.onCreateOptionsMenu(menu);
+
+        MenuInflater menuInflater = getMenuInflater();
+
+        menuInflater.inflate(R.menu.top_level_map, menu);
+
+        return true;
     }
 }
