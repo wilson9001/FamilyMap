@@ -19,4 +19,7 @@
     <string name="maleConst">m</string>
     <string name="femaleConst">f</string>
     <string name="title_activity_maps">Map</string>
+    <string name="menu_option_filter">Filter</string>
+    <string name="menu_options_search">Search</string>
+    <string name="menu_options_options">Options</string>
 </resources>

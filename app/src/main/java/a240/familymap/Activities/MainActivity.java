@@ -42,9 +42,6 @@ import a240.familymap.R;
 
 public class MainActivity extends AppCompatActivity implements Login.OnFragmentInteractionListener, test.OnFragmentInteractionListener, OnMapReadyCallback, GoogleMap.OnMarkerClickListener /*, LoginTask.Context, SyncTask.Context*/
 {
-   // private GoogleMap mMap;
-    /*private EditText mServerPortInput, mServerHostInput, mUserNameInput, mPasswordInput;
-    private Button mSignInButton;*/
     private test mapFragment;
 
     @Override
@@ -63,57 +60,10 @@ public class MainActivity extends AppCompatActivity implements Login.OnFragmentI
 
             fragmentManager.beginTransaction().add(R.id.fragmentContainer, fragment).commit();
         }
-
-        /*View fragmentView = fragment.getView();
-
-        mServerPortInput = (EditText) fragmentView.findViewById(R.id.serverPortInput);
-        mServerHostInput = (EditText) fragmentView.findViewById(R.id.serverHostInput);
-        mUserNameInput = (EditText) fragmentView.findViewById(R.id.userNameInput);
-        mPasswordInput = (EditText) fragmentView.findViewById(R.id.passwordInput);
-
-        mSignInButton = (Button) fragmentView.findViewById(R.id.signInButton);
-        //mSignInButton.setEnabled(false);
-       mSignInButton.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                signIn();
-            }
-        });
-        */
     }
 
-    /*private void signIn()
-    {
-        //grab info from host, port, username, password and send through server proxy to login to server.
-        String serverHostString = mServerHostInput.getText().toString();
-        int portInt = Integer.valueOf(mServerHostInput.getText().toString());
-        String userNameString = mUserNameInput.getText().toString();
-        String passwordString = mPasswordInput.getText().toString();
-
-        //boolean success = false;
-
-        //interact with HTTPServerProxy
-        LoginTask loginTask = new LoginTask(this);
-
-        loginTask.execute(serverHostString, String.valueOf(portInt), userNameString, passwordString);
-        /*if(success)
-        {
-            String personName = "Login Successful";
-            //^ will show first and last name concatenated.
-
-            Toast.makeText(this, personName, Toast.LENGTH_SHORT).show();
-        }
-
-        else
-        {
-            Toast.makeText(this, R.string.signInFailedText, Toast.LENGTH_SHORT).show();
-        }*/
-    //}
-
     @Override
-    public void transferToTLMap()/*onFragmentInteraction(Uri uri)*/
+    public void transferToTLMap()
     {
 
         mapFragment = new test();
@@ -128,7 +78,7 @@ public class MainActivity extends AppCompatActivity implements Login.OnFragmentI
     }
 
     @Override
-    public void loadMap(TextView eventInfoText/*Uri uri*/)
+    public void loadMap(TextView eventInfoText)
     {
         SupportMapFragment mapFragment = SupportMapFragment.newInstance();
 
@@ -158,7 +108,6 @@ public class MainActivity extends AppCompatActivity implements Login.OnFragmentI
 
         String eventType;
         Set<String> personIDs = personIDtoFilteredEvents.keySet();
-        //HashMap<String, PersonModel> personIDToPersonModel = appdata.getPersonIDToPersonModel();
         Marker eventMarker;
         HashMap<String, Float> eventTypeToColor = appdata.getEventTypeColor();
         Float markerColor;
@@ -169,34 +118,14 @@ public class MainActivity extends AppCompatActivity implements Login.OnFragmentI
 
             for(EventModel events : eventsForPerson)
             {
-                /*personIDFromEvent = events.getPerson();
-                eventDescr = new StringBuilder();
-                eventDescr.append(personIDToPersonModel.get(personIDFromEvent).getFirstName());
-                eventDescr.append(" ");
-                eventDescr.append(personIDToPersonModel.get(personIDFromEvent).getLastName());
-                //eventDescr.append("\n");
-                eventDescr.append(" ");
-                eventDescr.append(events.getEventType());
-                eventDescr.append(": ");
-                eventDescr.append(events.getCity());
-                eventDescr.append(", ");
-                eventDescr.append(events.getCountry());
-                eventDescr.append(" (");
-                eventDescr.append(events.getYear());
-                eventDescr.append(")");*/
-
-                //float leftLimit = 0F;
-                // /*- leftLimit*//*);
-
                 nextMarker = new LatLng(events.getLatitude(), events.getLongitude());
                 eventType = events.getEventType();
 
                 markerColor = eventTypeToColor.get(eventType.toLowerCase());
                 eventMarker = mMap.addMarker(new MarkerOptions()
                         .position(nextMarker)
-                        //.title(eventDescr.toString())
                         .icon(BitmapDescriptorFactory.defaultMarker(markerColor)));
-                eventMarker.setTag(events/*.getEventID()*/);
+                eventMarker.setTag(events);
             }
         }
 
@@ -208,23 +137,15 @@ public class MainActivity extends AppCompatActivity implements Login.OnFragmentI
     @Override
     public boolean onMarkerClick(final Marker marker)
     {
-        //String eventID = (String) marker.getTag();
         EventModel eventModel = (EventModel) marker.getTag();
 
         AppData appData = AppData.getInstance();
-
-        //HashMap<String, EventModel> eventIDToEventModel = appData.getEventIDToEvent();
-
-        //EventModel eventModel = eventIDToEventModel.get(eventID);
 
         String personID = eventModel.getPerson();
 
         HashMap<String, PersonModel> personIDToPersonModel = appData.getPersonIDToPersonModel();
 
         PersonModel personModel = personIDToPersonModel.get(personID);
-
-        //String firstName, lastName, city, country;
-        //int year;
 
         StringBuilder eventInfoBuilder = new StringBuilder();
 
@@ -241,15 +162,10 @@ public class MainActivity extends AppCompatActivity implements Login.OnFragmentI
         eventInfoBuilder.append(eventModel.getYear());
         eventInfoBuilder.append(")");
 
-        //Toast.makeText(this, eventID, Toast.LENGTH_LONG).show();
-
-        //android.support.v4.app.Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.test);
-
         View mapFragmentView = mapFragment.getView();
 
         TextView eventInfo = mapFragmentView.findViewById(R.id.eventInfoText);
 
-        //test currentMap = getSupportFragmentManager().findFragmentById(R.id.fragmentOuterContainer1);
         eventInfo.setText(eventInfoBuilder.toString());
         return false;
     }
