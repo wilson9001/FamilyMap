@@ -79,6 +79,12 @@ public class Login extends android.support.v4.app.Fragment implements LoginTask.
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }*/
+
+        AppData appData = AppData.getInstance();
+
+        appData.setLifeStoryLine(AppData.COLOR_GREEN_ARGB);
+        appData.setSpouseLineColor(AppData.COLOR_BLUE_ARGB);
+        appData.setFamilyTreeLineColor(AppData.COLOR_PURPLE_ARGB);
     }
 
     @Override
@@ -164,7 +170,6 @@ public class Login extends android.support.v4.app.Fragment implements LoginTask.
         LoginTask loginTask = new LoginTask(this);
 
         loginTask.execute(serverHostString, String.valueOf(portInt), userNameString, passwordString);
-
         }
 
 

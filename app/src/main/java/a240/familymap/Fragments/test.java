@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,17 +42,18 @@ import a240.familymap.R;
 public class test extends android.support.v4.app.Fragment/*SupportMapFragment*/ //implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener
 {
     private TextView eventInfo;
+    private LinearLayout eventDetailLayout;
 
-    // TODO: Rename parameter arguments, choose names that match
+    // TOoDO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     /*private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";*/
 
-    // TODO: Rename and change types of parameters
+    // ToODO: Rename and change types of parameters
    /* private String mParam1;
     private String mParam2;*/
 
-    private OnFragmentInteractionListener mListener;
+    private OnFragmentInteractionListener mListener, mTransferListener;
 
     public test()
     {
@@ -64,7 +66,7 @@ public class test extends android.support.v4.app.Fragment/*SupportMapFragment*/ 
      *
      * @return A new instance of fragment test.
      */
-    // TODO: Rename and change types and number of parameters
+    // TO0DO: Rename and change types and number of parameters
     public static test newInstance(/*String param1, String param2*/)
     {
         test fragment = new test();
@@ -91,7 +93,15 @@ public class test extends android.support.v4.app.Fragment/*SupportMapFragment*/ 
 
         eventInfo = v.findViewById(R.id.eventInfoText);
 
-
+        eventDetailLayout = v.findViewById(R.id.eventInfoLayout);
+        eventDetailLayout.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                transferToPerson();
+            }
+        });
 
         return v;
     }
@@ -105,6 +115,13 @@ public class test extends android.support.v4.app.Fragment/*SupportMapFragment*/ 
         }
     }
 
+    public void transferToPerson()
+    {
+        if(mTransferListener != null)
+        {
+            mTransferListener.toPersonInfo();
+        }
+    }
     @Override
     public void onAttach(Context context)
     {
@@ -112,6 +129,7 @@ public class test extends android.support.v4.app.Fragment/*SupportMapFragment*/ 
         if (context instanceof OnFragmentInteractionListener)
         {
             mListener = (OnFragmentInteractionListener) context;
+            mTransferListener = (OnFragmentInteractionListener) context;
         } else
         {
             throw new RuntimeException(context.toString()
@@ -124,6 +142,7 @@ public class test extends android.support.v4.app.Fragment/*SupportMapFragment*/ 
     {
         super.onDetach();
         mListener = null;
+        mTransferListener = null;
     }
 
     public void setEventInfo(String eventInfo)
@@ -144,5 +163,6 @@ public class test extends android.support.v4.app.Fragment/*SupportMapFragment*/ 
     public interface OnFragmentInteractionListener
     {
         void loadMap(TextView eventInfoText/*Uri uri*/);
+        void toPersonInfo();
     }
 }

@@ -69,6 +69,8 @@ public class MainActivity extends AppCompatActivity implements Login.OnFragmentI
 
         setContentView(R.layout.activity_main);
 
+        personIdOfSelectedPerson = null;
+
         FragmentManager fragmentManager = getSupportFragmentManager();
 
         Fragment fragment = fragmentManager.findFragmentById(R.id.fragmentContainer);
@@ -139,23 +141,23 @@ public class MainActivity extends AppCompatActivity implements Login.OnFragmentI
         Marker eventMarker;
         HashMap<String, Float> eventTypeToColor = appdata.getEventTypeColor();
         Float markerColor;
-        PolylineOptions polylineOptions;
+        /*PolylineOptions polylineOptions;
         int lineColor;
-        Random random = new Random();
+        Random random = new Random();*/
 
         for(String personID : personIDs )
         {
             ArrayList<EventModel> eventsForPerson = personIDtoFilteredEvents.get(personID);
 
-            lineColor = random.nextInt(/*0xffffffff*/);
+           // lineColor = random.nextInt(/*0xffffffff*/);
 
-            polylineOptions = new PolylineOptions().clickable(false).color(lineColor);
+            //polylineOptions = new PolylineOptions().clickable(false).color(lineColor);
 
             for(EventModel events : eventsForPerson)
             {
                 nextMarker = new LatLng(events.getLatitude(), events.getLongitude());
 
-                polylineOptions.add(nextMarker);
+               // polylineOptions.add(nextMarker);
 
                 eventType = events.getEventType();
 
@@ -166,7 +168,7 @@ public class MainActivity extends AppCompatActivity implements Login.OnFragmentI
                 eventMarker.setTag(events);
             }
 
-            mMap.addPolyline(polylineOptions);
+           // mMap.addPolyline(polylineOptions);
         }
 
        mMap.getUiSettings().setMapToolbarEnabled(false);
@@ -215,15 +217,13 @@ public class MainActivity extends AppCompatActivity implements Login.OnFragmentI
        if(personModel.getGender().equals("m"))
        {
            genderIcon.setText("{fa-male 35dp}");
-           //IconDrawable maleIcon = new IconDrawable(this, FontAwesomeIcons.fa_male);
-           //genderIcon.setImageDrawable(maleIcon);
        }
         else
        {
            genderIcon.setText("{fa-female 35dp}");
-           //IconDrawable femaleIcon = new IconDrawable(this, FontAwesomeIcons.fa_female);
-           //genderIcon.setImageDrawable(femaleIcon);
        }
+
+       personIdOfSelectedPerson = personID;
 
         return false;
     }
@@ -253,20 +253,14 @@ public class MainActivity extends AppCompatActivity implements Login.OnFragmentI
     {
         if(isMapFragment)
         {
-            //menu.add(0,R.id.search_menuItem, 0,"");
             menu.findItem(R.id.search_menuItem).setVisible(true);
-            // menu.add(0,R.id.filter_menuItem, 1,"");
             menu.findItem(R.id.filter_menuItem).setVisible(true);
-            //menu.add(0,R.id.settings_menuItem, 2,"");
             menu.findItem(R.id.settings_menuItem).setVisible(true);
         }
         else
         {
-            //menu.removeItem(R.id.filter_menuItem);
             menu.findItem(R.id.search_menuItem).setVisible(false);
-            //menu.removeItem(R.id.search_menuItem);
             menu.findItem(R.id.filter_menuItem).setVisible(false);
-            //menu.removeItem(R.id.settings_menuItem);
             menu.findItem(R.id.settings_menuItem).setVisible(false);
         }
         return true;
@@ -290,5 +284,14 @@ public class MainActivity extends AppCompatActivity implements Login.OnFragmentI
                 return super.onOptionsItemSelected(item);
         }
         return true;
+    }
+
+    @Override
+    public void toPersonInfo()
+    {
+        if(personIdOfSelectedPerson != null)
+        {
+            Toast.makeText(this, "Person Detail called", Toast.LENGTH_SHORT).show();
+        }
     }
 }

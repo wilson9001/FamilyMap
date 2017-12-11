@@ -28,8 +28,15 @@ public class AppData
     {
     }
 
+    public static final int COLOR_BLACK_ARGB = 0xff000000;
+    public static final int COLOR_WHITE_ARGB = 0xffffffff;
+    public static final int COLOR_GREEN_ARGB = 0xff388E3C;
+    public static final int COLOR_PURPLE_ARGB = 0xff81C784;
+    public static final int COLOR_ORANGE_ARGB = 0xffF57F17;
+    public static final int COLOR_BLUE_ARGB = 0xffF9A825;
+
     private String serverHost, authToken, userPersonID;
-    private int port;
+    private int port, spouseLineColor,familyTreeLineColor, lifeStoryLine;
     private PersonModel userPersonModel;
     //private UserModel userModel;
     private HashMap<String, ArrayList<EventModel>> personIDtoEvents, personIDToFilteredEvents;
@@ -38,7 +45,7 @@ public class AppData
    // private HashMap<String, EventModel> eventIDToEvent;
     private HashSet<String> eventTypesToShow, allEventTypes;
     private ArrayList<String> maternalAncestorIDs, paternalAncestorIDs;
-    private boolean showPaternal, showMaternal, showMale, showFemale;
+    private boolean showPaternal, showMaternal, showMale, showFemale, showSpouseLines, showFamilyTreeLines, showLifeStoryLine;
 
     public String getServerHost()
     {
@@ -218,6 +225,66 @@ public class AppData
     public void setEventTypeColor(HashMap<String, Float> eventTypeColor)
     {
         this.eventTypeColor = eventTypeColor;
+    }
+
+    public int getSpouseLineColor()
+    {
+        return spouseLineColor;
+    }
+
+    public void setSpouseLineColor(int spouseLineColor)
+    {
+        this.spouseLineColor = spouseLineColor;
+    }
+
+    public int getFamilyTreeLineColor()
+    {
+        return familyTreeLineColor;
+    }
+
+    public void setFamilyTreeLineColor(int familyTreeLineColor)
+    {
+        this.familyTreeLineColor = familyTreeLineColor;
+    }
+
+    public int getLifeStoryLine()
+    {
+        return lifeStoryLine;
+    }
+
+    public void setLifeStoryLine(int lifeStoryLine)
+    {
+        this.lifeStoryLine = lifeStoryLine;
+    }
+
+    public boolean isShowLifeStoryLine()
+    {
+        return showLifeStoryLine;
+    }
+
+    public void setShowLifeStoryLine(boolean showLifeStoryLine)
+    {
+        this.showLifeStoryLine = showLifeStoryLine;
+    }
+
+    public boolean isShowFamilyTreeLines()
+    {
+        return showFamilyTreeLines;
+    }
+
+    public void setShowFamilyTreeLines(boolean showFamilyTreeLines)
+    {
+        this.showFamilyTreeLines = showFamilyTreeLines;
+    }
+
+    public boolean isShowSpouseLines()
+    {
+        return showSpouseLines;
+    }
+
+    public void setShowSpouseLines(boolean showSpouseLines)
+    {
+        this.showSpouseLines = showSpouseLines;
     }
 
    /* public HashMap<String, EventModel> getEventIDToEvent()
