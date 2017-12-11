@@ -30,6 +30,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.Iconify;
@@ -57,6 +58,8 @@ public class MainActivity extends AppCompatActivity implements Login.OnFragmentI
     private test mapFragment;
     private boolean isMapFragment;
     private String personIdOfSelectedPerson;
+    private GoogleMap mMap;
+    private ArrayList<Polyline> linesOnMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -126,7 +129,7 @@ public class MainActivity extends AppCompatActivity implements Login.OnFragmentI
     @Override
     public void onMapReady(GoogleMap googleMap)
     {
-        GoogleMap mMap = googleMap;
+        mMap = googleMap;
 
         //mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
 
@@ -181,6 +184,20 @@ public class MainActivity extends AppCompatActivity implements Login.OnFragmentI
     @Override
     public boolean onMarkerClick(final Marker marker)
     {
+        if(linesOnMap != null)
+        {
+            for(Polyline line : linesOnMap)
+            {
+                line.remove();
+            }
+
+            linesOnMap.clear();
+        }
+        else
+        {
+            linesOnMap = new ArrayList<>();
+        }
+
         EventModel eventModel = (EventModel) marker.getTag();
 
         AppData appData = AppData.getInstance();
@@ -225,7 +242,120 @@ public class MainActivity extends AppCompatActivity implements Login.OnFragmentI
 
        personIdOfSelectedPerson = personID;
 
+        HashMap<String, ArrayList<EventModel>> personIDToEvents = appData.getPersonIDToFilteredEvents();
+
+        if(appData.isShowLifeStoryLine())
+        {
+            ArrayList<EventModel> events = personIDToEvents.get(personID);
+
+            PolylineOptions polylineOptions = new PolylineOptions().color(appData.getLifeStoryLine()).clickable(false);
+
+            LatLng latLng;
+
+            for(EventModel event : events)
+            {
+                latLng = new LatLng(event.getLatitude(), event.getLongitude());
+                polylineOptions.add(latLng);
+            }
+
+            linesOnMap.add(mMap.addPolyline(polylineOptions));
+        }
+        if(appData.isShowSpouseLines())
+        {
+            String spouseID = personModel.getSpouse();
+
+            PersonModel spouseModel = personIDToPersonModel.get(spouseID);
+
+            if(spouseModel != null)
+            {
+                ArrayList<EventModel> events = personIDToEvents.get(personID);
+
+                if(events != null)
+                {
+                    EventModel earliestEvent = events.get(0);
+
+                    if(earliestEvent != null)
+                    {
+                        LatLng latLng = new LatLng(eventModel.getLatitude(), eventModel.getLongitude());
+                        LatLng latLng1 = new LatLng(earliestEvent.getLatitude(), earliestEvent.getLongitude());
+                        linesOnMap.add(mMap.addPolyline(new PolylineOptions().clickable(false).color(appData.getSpouseLineColor()).add(latLng).add(latLng1)));
+                    }
+                }
+            }
+        }
+        if(appData.isShowFamilyTreeLines())
+        {
+            int startingLineThickness = 25;
+
+            addRecursiveAncestorPolyLines(eventModel, startingLineThickness);
+        }
+
         return false;
+    }
+
+
+    private void addRecursiveAncestorPolyLines(EventModel seedEvent, int lineThickness)
+    {
+        if(lineThickness > 5)
+        {
+            lineThickness = lineThickness - 5;
+        }
+
+        AppData appData = AppData.getInstance();
+
+        String personID = seedEvent.getPerson();
+
+        HashMap<String, PersonModel> personIdToPersonModel = appData.getPersonIDToPersonModel();
+
+        PersonModel personModel = personIdToPersonModel.get(personID);
+
+        String fatherID = personModel.getFather();
+        String motherID = personModel.getMother();
+
+        HashMap<String, ArrayList<EventModel>> personIdToEvents = appData.getPersonIDToFilteredEvents();
+
+        if(fatherID != null)
+        {
+            ArrayList<EventModel> events = personIdToEvents.get(fatherID);
+
+            if(events != null)
+            {
+                EventModel earliestEvent = events.get(0);
+
+                if(earliestEvent != null)
+                {
+                    linesOnMap.add(mMap.addPolyline(new PolylineOptions()
+                            .color(appData.getFamilyTreeLineColor())
+                            .clickable(false)
+                            .width(lineThickness)
+                            .add(new LatLng(seedEvent.getLatitude(), seedEvent.getLongitude()))
+                            .add(new LatLng(earliestEvent.getLatitude(), earliestEvent.getLongitude()))));
+
+                    addRecursiveAncestorPolyLines(earliestEvent, lineThickness);
+                }
+            }
+        }
+        if(motherID != null)
+        {
+            ArrayList<EventModel> events = personIdToEvents.get(motherID);
+
+            if(events != null)
+            {
+                EventModel earliestEvent = events.get(0);
+
+                if(earliestEvent != null)
+                {
+                    linesOnMap.add(mMap.addPolyline(new PolylineOptions()
+                            .color(appData.getFamilyTreeLineColor())
+                            .clickable(false)
+                            .width(lineThickness)
+                            .add(new LatLng(seedEvent.getLatitude(), seedEvent.getLongitude()))
+                            .add(new LatLng(earliestEvent.getLatitude(), earliestEvent.getLongitude()))));
+
+                    addRecursiveAncestorPolyLines(earliestEvent, lineThickness);
+                }
+            }
+        }
     }
 
     @Override

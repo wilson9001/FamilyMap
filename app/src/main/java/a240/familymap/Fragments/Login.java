@@ -84,7 +84,10 @@ public class Login extends android.support.v4.app.Fragment implements LoginTask.
 
         appData.setLifeStoryLine(AppData.COLOR_GREEN_ARGB);
         appData.setSpouseLineColor(AppData.COLOR_BLUE_ARGB);
-        appData.setFamilyTreeLineColor(AppData.COLOR_PURPLE_ARGB);
+        appData.setFamilyTreeLineColor(AppData.COLOR_BLACK_ARGB);
+        appData.setShowFamilyTreeLines(true);
+        appData.setShowLifeStoryLine(true);
+        appData.setShowSpouseLines(true);
     }
 
     @Override
