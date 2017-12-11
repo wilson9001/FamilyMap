@@ -1,8 +1,6 @@
 <resources>
     <string name="app_name">Family Map</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="serverHostLabel">Server Host</string>
     <string name="serverPortLabel">Server Port</string>
     <string name="userNameLabel">User Name</string>
@@ -21,5 +19,5 @@
     <string name="title_activity_maps">Map</string>
     <string name="menu_option_filter">Filter</string>
     <string name="menu_options_search">Search</string>
-    <string name="menu_options_options">Options</string>
+    <string name="menu_options_settings">Settings</string>
 </resources>

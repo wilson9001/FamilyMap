@@ -3,6 +3,7 @@ package a240.familymap.Activities;
 //import android.app.Fragment;
 //import android.app.FragmentManager;
 //import android.net.Uri;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -11,7 +12,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 //import android.widget.Button;
@@ -27,6 +30,13 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
+import com.joanzapata.iconify.IconDrawable;
+import com.joanzapata.iconify.Iconify;
+import com.joanzapata.iconify.fonts.FontAwesomeIcons;
+import com.joanzapata.iconify.fonts.FontAwesomeModule;
+import com.joanzapata.iconify.fonts.TypiconsIcons;
+import com.joanzapata.iconify.fonts.TypiconsModule;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -46,11 +56,17 @@ public class MainActivity extends AppCompatActivity implements Login.OnFragmentI
 {
     private test mapFragment;
     private boolean isMapFragment;
+    private String personIdOfSelectedPerson;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+
+        Iconify
+                .with(new TypiconsModule())
+                .with(new FontAwesomeModule());
+
         setContentView(R.layout.activity_main);
 
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -64,35 +80,18 @@ public class MainActivity extends AppCompatActivity implements Login.OnFragmentI
             isMapFragment = false;
 
             fragmentManager.beginTransaction().add(R.id.fragmentContainer, fragment).commit();
-
-            invalidateOptionsMenu();
-        }
-
-        isMapFragment = true;
-    }
-
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu)
-    {
-        if(isMapFragment)
-        {
-            menu.add(0,R.id.search_menuItem, 0,"");
-            menu.add(0,R.id.filter_menuItem, 1,"");
-            menu.add(0,R.id.settings_menuItem, 2,"");
         }
         else
         {
-            menu.removeItem(R.id.filter_menuItem);
-            menu.removeItem(R.id.search_menuItem);
-            menu.removeItem(R.id.settings_menuItem);
+            isMapFragment = true;
+
+            invalidateOptionsMenu();
         }
-        return true;
     }
 
     @Override
     public void transferToTLMap()
     {
-
         mapFragment = new test();
 
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
@@ -104,8 +103,6 @@ public class MainActivity extends AppCompatActivity implements Login.OnFragmentI
         isMapFragment = true;
 
         fragmentTransaction.commit();
-
-        invalidateOptionsMenu();
     }
 
     @Override
@@ -142,14 +139,24 @@ public class MainActivity extends AppCompatActivity implements Login.OnFragmentI
         Marker eventMarker;
         HashMap<String, Float> eventTypeToColor = appdata.getEventTypeColor();
         Float markerColor;
+        PolylineOptions polylineOptions;
+        int lineColor;
+        Random random = new Random();
 
         for(String personID : personIDs )
         {
             ArrayList<EventModel> eventsForPerson = personIDtoFilteredEvents.get(personID);
 
+            lineColor = random.nextInt(/*0xffffffff*/);
+
+            polylineOptions = new PolylineOptions().clickable(false).color(lineColor);
+
             for(EventModel events : eventsForPerson)
             {
                 nextMarker = new LatLng(events.getLatitude(), events.getLongitude());
+
+                polylineOptions.add(nextMarker);
+
                 eventType = events.getEventType();
 
                 markerColor = eventTypeToColor.get(eventType.toLowerCase());
@@ -158,11 +165,15 @@ public class MainActivity extends AppCompatActivity implements Login.OnFragmentI
                         .icon(BitmapDescriptorFactory.defaultMarker(markerColor)));
                 eventMarker.setTag(events);
             }
+
+            mMap.addPolyline(polylineOptions);
         }
 
        mMap.getUiSettings().setMapToolbarEnabled(false);
 
         mMap.setOnMarkerClickListener(this);
+
+        invalidateOptionsMenu();
     }
 
     @Override
@@ -198,6 +209,22 @@ public class MainActivity extends AppCompatActivity implements Login.OnFragmentI
         TextView eventInfo = mapFragmentView.findViewById(R.id.eventInfoText);
 
         eventInfo.setText(eventInfoBuilder.toString());
+
+        TextView genderIcon = mapFragmentView.findViewById(R.id.genderIcon);
+
+       if(personModel.getGender().equals("m"))
+       {
+           genderIcon.setText("{fa-male 35dp}");
+           //IconDrawable maleIcon = new IconDrawable(this, FontAwesomeIcons.fa_male);
+           //genderIcon.setImageDrawable(maleIcon);
+       }
+        else
+       {
+           genderIcon.setText("{fa-female 35dp}");
+           //IconDrawable femaleIcon = new IconDrawable(this, FontAwesomeIcons.fa_female);
+           //genderIcon.setImageDrawable(femaleIcon);
+       }
+
         return false;
     }
 
@@ -210,6 +237,58 @@ public class MainActivity extends AppCompatActivity implements Login.OnFragmentI
 
         menuInflater.inflate(R.menu.top_level_map, menu);
 
+        menu.findItem(R.id.search_menuItem).setIcon(new IconDrawable(this, FontAwesomeIcons.fa_search).actionBarSize());
+        menu.findItem(R.id.filter_menuItem).setIcon(new IconDrawable(this, TypiconsIcons.typcn_filter).actionBarSize());
+        menu.findItem(R.id.settings_menuItem).setIcon(new IconDrawable(this, FontAwesomeIcons.fa_gear).actionBarSize());
+
+        menu.findItem(R.id.search_menuItem).setVisible(false);
+        menu.findItem(R.id.filter_menuItem).setVisible(false);
+        menu.findItem(R.id.settings_menuItem).setVisible(false);
+
+        return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu)
+    {
+        if(isMapFragment)
+        {
+            //menu.add(0,R.id.search_menuItem, 0,"");
+            menu.findItem(R.id.search_menuItem).setVisible(true);
+            // menu.add(0,R.id.filter_menuItem, 1,"");
+            menu.findItem(R.id.filter_menuItem).setVisible(true);
+            //menu.add(0,R.id.settings_menuItem, 2,"");
+            menu.findItem(R.id.settings_menuItem).setVisible(true);
+        }
+        else
+        {
+            //menu.removeItem(R.id.filter_menuItem);
+            menu.findItem(R.id.search_menuItem).setVisible(false);
+            //menu.removeItem(R.id.search_menuItem);
+            menu.findItem(R.id.filter_menuItem).setVisible(false);
+            //menu.removeItem(R.id.settings_menuItem);
+            menu.findItem(R.id.settings_menuItem).setVisible(false);
+        }
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        switch(item.getItemId())
+        {
+            case R.id.search_menuItem:
+                Toast.makeText(this, "Search Item Called", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.filter_menuItem:
+                Toast.makeText(this, "Filter item called", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.settings_menuItem:
+                Toast.makeText(this, "Settings item called", Toast.LENGTH_SHORT).show();
+                break;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
         return true;
     }
 }

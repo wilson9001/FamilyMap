@@ -81,32 +81,6 @@ public class test extends android.support.v4.app.Fragment/*SupportMapFragment*/ 
         super.onCreate(savedInstanceState);
 
         readyForMap(eventInfo);
-        /*----SupportMapFragment mapFragment = SupportMapFragment.newInstance();
-
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-
-        fragmentTransaction.add(R.id.mapFragmentContainer, mapFragment);
-
-        //fragmentTransaction.addToBackStack("first");
-
-        fragmentTransaction.commit();
-
-        mapFragment.getMapAsync(this);---*/
-        //SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.fragmentContainer1);
-        /*getMapAsync(new OnMapReadyCallback()
-        {
-            @Override
-            public void onMapReady(GoogleMap googleMap)
-            {
-                googleMap.addMarker(new MarkerOptions().position(new LatLng(0,0)).title("test"));
-            }
-        });
-
-        /*if (getArguments() != null)
-        {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }*/
     }
 
     @Override
@@ -116,6 +90,8 @@ public class test extends android.support.v4.app.Fragment/*SupportMapFragment*/ 
         View v = inflater.inflate(R.layout.fragment_test, container, false);
 
         eventInfo = v.findViewById(R.id.eventInfoText);
+
+
 
         return v;
     }
@@ -169,81 +145,4 @@ public class test extends android.support.v4.app.Fragment/*SupportMapFragment*/ 
     {
         void loadMap(TextView eventInfoText/*Uri uri*/);
     }
-
-   /* @Override
-    public void onMapReady(GoogleMap googleMap)
-    {
-        GoogleMap mMap = googleMap;
-
-        // Add a marker in Sydney and move the camera
-        /*LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
-
-        LatLng nextMarker = new LatLng(0,0);
-        mMap.addMarker(new MarkerOptions().position(nextMarker).title("MyMarker"));*/
-
-       /* LatLng nextMarker;
-
-        AppData appdata = AppData.getInstance();
-
-        HashMap<String, ArrayList<EventModel>> personIDtoFilteredEvents = appdata.getPersonIDToFilteredEvents();
-
-        StringBuilder eventDescr;
-        String personIDFromEvent, eventType;
-        Set<String> personIDs = personIDtoFilteredEvents.keySet();
-        HashMap<String, PersonModel> personIDToPersonModel = appdata.getPersonIDToPersonModel();
-        Marker eventMarker;
-        HashMap<String, Float> eventTypeToColor = appdata.getEventTypeColor();
-        Float markerColor;
-
-        for(String personID : personIDs )
-        {
-            ArrayList<EventModel> eventsForPerson = personIDtoFilteredEvents.get(personID);
-
-            for(EventModel events : eventsForPerson)
-            {
-                nextMarker = new LatLng(events.getLatitude(), events.getLongitude());
-
-                personIDFromEvent = events.getPerson();
-                eventDescr = new StringBuilder();
-                eventDescr.append(personIDToPersonModel.get(personIDFromEvent).getFirstName());
-                eventDescr.append(" ");
-                eventDescr.append(personIDToPersonModel.get(personIDFromEvent).getLastName());
-                //eventDescr.append("\n");
-                eventDescr.append(" ");
-                eventDescr.append(events.getEventType());
-                eventDescr.append(": ");
-                eventDescr.append(events.getCity());
-                eventDescr.append(", ");
-                eventDescr.append(events.getCountry());
-                eventDescr.append(" (");
-                eventDescr.append(events.getYear());
-                eventDescr.append(")");
-
-                //float leftLimit = 0F;
-                // /*- leftLimit*//*);
-                eventType = events.getEventType();
-
-                markerColor = eventTypeToColor.get(eventType.toLowerCase());
-                eventMarker = mMap.addMarker(new MarkerOptions()
-                        .position(nextMarker)
-                        .title(eventDescr.toString())
-                        .icon(BitmapDescriptorFactory.defaultMarker(markerColor/*markerColor.floatValue()*///) /*BitmapDescriptorFactory.HUE_AZURE*/));
-               /* eventMarker.setTag(events.getEventID());
-            }
-        }
-
-        mMap.setOnMarkerClickListener(this);
-    }*/
-
-    //@Override
-   /* public boolean onMarkerClick(final Marker marker)
-    {
-        String eventID = (String) marker.getTag();
-
-        Toast.makeText(this.getContext(), eventID, Toast.LENGTH_LONG).show();
-
-        return false;
-    }*/
 }

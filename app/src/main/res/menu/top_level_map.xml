@@ -4,16 +4,19 @@
     <item
         android:id="@+id/search_menuItem"
         android:icon="@android:drawable/ic_menu_search"
-        android:title="Search"
+        android:title="@string/menu_options_search"
+        android:visible="false"
         app:showAsAction="always"/>
     <item
         android:id="@+id/filter_menuItem"
         android:icon="@android:drawable/ic_menu_view"
-        android:title="Filter"
+        android:title="@string/menu_option_filter"
+        android:visible="false"
         app:showAsAction="always"/>
     <item
         android:id="@+id/settings_menuItem"
         android:icon="@android:drawable/ic_menu_manage"
-        android:title="Settings"
+        android:title="@string/menu_options_settings"
+        android:visible="false"
         app:showAsAction="always"/>
 </menu>

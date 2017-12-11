@@ -185,20 +185,13 @@ public class SyncTask extends AsyncTask</*String*/Boolean, Void, /*Pair<List<Per
                 return false;
             }
 
-            //appData.setEventTypesToShow(new HashSet<String>());
             appData.setAllEventTypes(new HashSet<String>());
             appData.setPersonIDtoEvents(new HashMap<String, ArrayList<EventModel>>());
-            //appData.setPersonIDToFilteredEvents(new HashMap<String, List<EventModel>>());
 
-            //Set<String> eventTypesToShow = appData.getEventTypesToShow();
             HashSet<String> allEventTypes = appData.getAllEventTypes();
             HashMap PersonIDToEvents = appData.getPersonIDtoEvents();
 
             ArrayList<EventModel> eventList;
-
-            //appData.setEventIDToEvent(new HashMap<String, EventModel>());
-
-            //HashMap<String, EventModel> eventIDToEvents = appData.getEventIDToEvent();
 
             for (EventModel event : events)
             {
@@ -215,29 +208,7 @@ public class SyncTask extends AsyncTask</*String*/Boolean, Void, /*Pair<List<Per
                 }
 
                 allEventTypes.add(event.getEventType().toLowerCase());
-
-               // eventIDToEvents.put(event.getEventID(), event);
             }
-
-            /*Set<String> personIDs = PersonIDToEvents.keySet();
-            ArrayList<EventModel> eventsForPerson;
-
-            Comparator eventComparator = new Comparator<EventModel>()
-            {
-                @Override
-                public int compare(EventModel e1, EventModel e2)
-                {
-                    return ComparisonChain.start().compare(e1.getYear(), e2.getYear()).compare(e1.getEventType(), e2.getEventType()).result();
-                }
-            };
-
-            for(String personID : personIDs)
-            {
-                eventsForPerson = (ArrayList<EventModel>) PersonIDToEvents.get(personID);
-
-                //Collections.sort(eventsForPerson, Comparator.comparing(EventModel::getYear).thenComparing(EventModel::getEventType));
-                Collections.sort(eventsForPerson, eventComparator);
-            }*/
 
             appData.setEventTypeColor(new HashMap<String, Float>());
             HashMap<String, Float> eventTypeToFloat = appData.getEventTypeColor();
@@ -255,7 +226,7 @@ public class SyncTask extends AsyncTask</*String*/Boolean, Void, /*Pair<List<Per
 
             appData.setEventTypesToShow(new HashSet<>(allEventTypes));
             appData.setPersonIDToFilteredEvents(new HashMap<>(PersonIDToEvents));
-            //alter later to return dynamic value
+
             return true;
         }
         catch(MalformedURLException ex)

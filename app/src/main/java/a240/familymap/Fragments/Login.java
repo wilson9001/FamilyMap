@@ -122,37 +122,6 @@ public class Login extends android.support.v4.app.Fragment implements LoginTask.
             }
         });
 
-        /*mSignInButton.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                //grab info from host, port, username, password and send through server proxy to login to server.
-                String serverHostString = mServerHostInput.getText().toString();
-                int portInt = Integer.valueOf(mServerPortInput.getText().toString());
-                String userNameString = mUserNameInput.getText().toString();
-                String passwordString = mPasswordInput.getText().toString();
-
-                boolean success = false;
-
-                //interact with HTTPServerProxy
-                LoginTask loginTask = new LoginTask(this);
-
-                if(success)
-                {
-                    String personName = "Login Successful";
-                    //^ will show first and last name concatenated.
-
-                    Toast.makeText(getActivity().getApplicationContext(), personName, Toast.LENGTH_SHORT).show();
-                }
-
-                else
-                {
-                    Toast.makeText(getActivity().getApplicationContext(), R.string.signInFailedText, Toast.LENGTH_SHORT).show();
-                }
-            }
-        });*/
-
         mRegisterButton = /*(Button)*/ v.findViewById(R.id.registerButton);
         mRegisterButton.setEnabled(false);
         mRegisterButton.setOnClickListener(new View.OnClickListener()
@@ -183,21 +152,6 @@ public class Login extends android.support.v4.app.Fragment implements LoginTask.
         RegisterTask registerTask = new RegisterTask(this);
 
         registerTask.execute(serverHostString, String.valueOf(portInt), userNameString, passwordString, firstNameString, lastNameString, emailString, genderString);
-        //call login service from serverProxy class;
-
-        /*
-        boolean success = false;
-
-        if(success)
-        {
-            //switch to map fragment
-            Toast.makeText(getActivity().getApplicationContext(), "Register Successful", Toast.LENGTH_SHORT).show();
-        }
-        else
-        {
-            Toast.makeText(getActivity().getApplicationContext(), "Register Failed!", Toast.LENGTH_SHORT).show();
-        }
-        */
     }
     private void signIn()
     {
@@ -207,24 +161,10 @@ public class Login extends android.support.v4.app.Fragment implements LoginTask.
         String userNameString = mUserNameInput.getText().toString();
         String passwordString = mPasswordInput.getText().toString();
 
-        //boolean success = false;
-
-        //interact with HTTPServerProxy
         LoginTask loginTask = new LoginTask(this);
 
         loginTask.execute(serverHostString, String.valueOf(portInt), userNameString, passwordString);
-        /*if(success)
-        {
-            String personName = "Login Successful";
-            //^ will show first and last name concatenated.
 
-            Toast.makeText(this, personName, Toast.LENGTH_SHORT).show();
-        }
-
-        else
-        {
-            Toast.makeText(this, R.string.signInFailedText, Toast.LENGTH_SHORT).show();
-        }*/
         }
 
 
@@ -271,13 +211,6 @@ public class Login extends android.support.v4.app.Fragment implements LoginTask.
         else
         {
             syncComplete();
-
-            //Pair<List<PersonModel>, List<PersonModel>>;
-            /*
-            PersonModel userPerson = people.get(0);
-
-            Toast.makeText(this.getContext(), userPerson.getFirstName() + " " + userPerson.getLastName(), Toast.LENGTH_LONG).show();
-            */
         }
     }
 
