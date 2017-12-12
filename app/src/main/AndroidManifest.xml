@@ -48,6 +48,10 @@
         </activity>
         <activity android:name=".Activities.PersonActivity">
         </activity>
+        <activity
+            android:name=".Activities.SettingsActivity"
+            android:label="@string/title_activity_settings">
+        </activity>
     </application>
 
 </manifest>

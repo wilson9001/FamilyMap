@@ -13,6 +13,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
@@ -210,6 +211,47 @@ public class SyncTask extends AsyncTask</*String*/Boolean, Void, /*Pair<List<Per
                 allEventTypes.add(event.getEventType().toLowerCase());
             }
 
+            Set<String> personIDSet = PersonIDToEvents.keySet();
+            ArrayList<EventModel> eventsForPerson;
+            ArrayList<EventModel> birthAndDeath;
+            //String eventType;
+            EventModel event;
+
+            for(String personID : personIDSet)
+            {
+                eventsForPerson = (ArrayList<EventModel>) PersonIDToEvents.get(personID);
+                String eventType;
+
+                birthAndDeath = new ArrayList<>();
+
+                for(int i = 0; i < eventsForPerson.size(); i++/*EventModel event : eventsForPerson*/)
+                {
+                    event = eventsForPerson.get(i);
+
+                    eventType = event.getEventType().toLowerCase();
+                    if(eventType.equals("birth") || eventType.equals("death"))
+                    {
+                        birthAndDeath.add(event);
+                        eventsForPerson.remove(i);
+                    }
+                }
+
+                Collections.sort(eventsForPerson, new eventComparator());
+
+                for(EventModel birthOrDeath : birthAndDeath)
+                {
+                    eventType = birthOrDeath.getEventType().toLowerCase();
+                    if(eventType.equals("birth"))
+                    {
+                        eventsForPerson.add(0, birthOrDeath);
+                    }
+                    else
+                    {
+                        eventsForPerson.add(birthOrDeath);
+                    }
+                }
+            }
+
             appData.setEventTypeColor(new HashMap<String, Float>());
             HashMap<String, Float> eventTypeToFloat = appData.getEventTypeColor();
 
@@ -233,6 +275,23 @@ public class SyncTask extends AsyncTask</*String*/Boolean, Void, /*Pair<List<Per
         {
             Log.e("EventTask", ex.getMessage(), ex);
             return false;
+        }
+    }
+
+    public class eventComparator implements Comparator<EventModel>
+    {
+        public int compare(EventModel e1, EventModel e2)
+        {
+            int yearValue = e1.getYear() - e2.getYear();
+
+            if(yearValue != 0)
+            {
+                return yearValue;
+            }
+
+            int nameValue = e1.getEventType().toLowerCase().compareTo(e2.getEventType().toLowerCase());
+
+            return nameValue;
         }
     }
 }
