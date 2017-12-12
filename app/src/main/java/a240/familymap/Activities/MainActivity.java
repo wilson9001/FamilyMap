@@ -3,6 +3,7 @@ package a240.familymap.Activities;
 //import android.app.Fragment;
 //import android.app.FragmentManager;
 //import android.net.Uri;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.support.v4.app.Fragment;
@@ -421,7 +422,11 @@ public class MainActivity extends AppCompatActivity implements Login.OnFragmentI
     {
         if(personIdOfSelectedPerson != null)
         {
-            Toast.makeText(this, "Person Detail called", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, "Person Detail called", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(MainActivity.this, PersonActivity.class);
+            intent.putExtra(getString(R.string.personIDForIntent), personIdOfSelectedPerson);
+            
+            startActivity(intent);
         }
     }
 }

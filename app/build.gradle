@@ -24,20 +24,30 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
+    // (v4.5)
+    // (v3,2015)
+    // (v2.0.7)
+    // (v2.0.0)
+    // (v1.4.57)
+    // (latest)
+    // (v2.0)
+    // (v1.0.0)
+    // (v2.0.1)
+    //compile 'com.google.common.collect.ComparisonChain'
+    //compile 'com.google.guava:guava:23.5-android'
     compile 'com.android.support:appcompat-v7:26.+'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.google.code.gson:gson:2.8.2'
     compile 'com.google.android.gms:play-services-maps:11.0.4'
-    compile 'com.joanzapata.iconify:android-iconify-fontawesome:2.2.2' // (v4.5)
-    compile 'com.joanzapata.iconify:android-iconify-entypo:2.2.2' // (v3,2015)
-    compile 'com.joanzapata.iconify:android-iconify-typicons:2.2.2' // (v2.0.7)
-    compile 'com.joanzapata.iconify:android-iconify-material:2.2.2' // (v2.0.0)
-    compile 'com.joanzapata.iconify:android-iconify-material-community:2.2.2' // (v1.4.57)
-    compile 'com.joanzapata.iconify:android-iconify-meteocons:2.2.2' // (latest)
-    compile 'com.joanzapata.iconify:android-iconify-weathericons:2.2.2' // (v2.0)
-    compile 'com.joanzapata.iconify:android-iconify-simplelineicons:2.2.2' // (v1.0.0)
-    compile 'com.joanzapata.iconify:android-iconify-ionicons:2.2.2' // (v2.0.1)
-    //compile 'com.google.common.collect.ComparisonChain'
-    //compile 'com.google.guava:guava:23.5-android'
+    compile 'com.joanzapata.iconify:android-iconify-fontawesome:2.2.2'
+    compile 'com.joanzapata.iconify:android-iconify-entypo:2.2.2'
+    compile 'com.joanzapata.iconify:android-iconify-typicons:2.2.2'
+    compile 'com.joanzapata.iconify:android-iconify-material:2.2.2'
+    compile 'com.joanzapata.iconify:android-iconify-material-community:2.2.2'
+    compile 'com.joanzapata.iconify:android-iconify-meteocons:2.2.2'
+    compile 'com.joanzapata.iconify:android-iconify-weathericons:2.2.2'
+    compile 'com.joanzapata.iconify:android-iconify-simplelineicons:2.2.2'
+    compile 'com.joanzapata.iconify:android-iconify-ionicons:2.2.2'
     testCompile 'junit:junit:4.12'
+    compile 'com.android.support:recyclerview-v7:26.0.0-alpha1'
 }
