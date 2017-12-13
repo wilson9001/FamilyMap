@@ -96,6 +96,22 @@ public class MainActivity extends AppCompatActivity implements Login.OnFragmentI
     }
 
     @Override
+    public void onResume()
+    {
+        super.onResume();
+
+        if(mMap != null)
+        {
+            AppData appData = AppData.getInstance();
+
+            if(mMap.getMapType() != appData.getMaptype())
+            {
+                mMap.setMapType(appData.getMaptype());
+            }
+        }
+    }
+
+    @Override
     public void transferToTLMap()
     {
         mapFragment = new test();
@@ -104,7 +120,7 @@ public class MainActivity extends AppCompatActivity implements Login.OnFragmentI
 
         fragmentTransaction.replace(R.id.fragmentContainer, mapFragment);
 
-        fragmentTransaction.addToBackStack("first");
+        //fragmentTransaction.addToBackStack("first");
 
         isMapFragment = true;
 
@@ -409,7 +425,10 @@ public class MainActivity extends AppCompatActivity implements Login.OnFragmentI
                 Toast.makeText(this, "Filter item called", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.settings_menuItem:
-                Toast.makeText(this, "Settings item called", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(this, "Settings item called", Toast.LENGTH_SHORT).show();
+
+                Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
+                startActivity(intent);
                 break;
             default:
                 return super.onOptionsItemSelected(item);

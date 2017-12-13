@@ -35,17 +35,30 @@ public class AppData
     public static final int COLOR_ORANGE_ARGB = 0xffF57F17;
     public static final int COLOR_BLUE_ARGB = 0xffF9A825;
 
+    public static final String[] COLORS = {"Black", "White", "Green", "Purple", "Orange", "Blue"};
+    public static final String[] MapTypes = {"Normal", "Hybrid", "Satellite", "Terrain"};
+
+    private int maptype;
+
     private String serverHost, authToken, userPersonID;
     private int port, spouseLineColor,familyTreeLineColor, lifeStoryLine;
     private PersonModel userPersonModel;
-    //private UserModel userModel;
     private HashMap<String, ArrayList<EventModel>> personIDtoEvents, personIDToFilteredEvents;
     private HashMap<String, Float> eventTypeColor;
     private HashMap<String, PersonModel> personIDToPersonModel;
-   // private HashMap<String, EventModel> eventIDToEvent;
     private HashSet<String> eventTypesToShow, allEventTypes;
     private ArrayList<String> maternalAncestorIDs, paternalAncestorIDs;
     private boolean showPaternal, showMaternal, showMale, showFemale, showSpouseLines, showFamilyTreeLines, showLifeStoryLine;
+
+    public int getMaptype()
+    {
+        return maptype;
+    }
+
+    public void setMaptype(int maptype)
+    {
+        this.maptype = maptype;
+    }
 
     public String getServerHost()
     {

@@ -1,5 +1,6 @@
 package a240.familymap.Activities;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.view.menu.MenuView;
@@ -183,7 +184,13 @@ public class PersonActivity extends AppCompatActivity
         @Override
         public void onClick(View view)
         {
-            Toast.makeText(getBaseContext(), mEventModel.getEventID(), Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getBaseContext(), mEventModel.getEventID(), Toast.LENGTH_SHORT).show();
+
+            Intent intent = new Intent(PersonActivity.this, MapsActivity.class);
+            intent.putExtra(getString(R.string.eventIDForMapActivity), mEventModel.getEventID());
+            intent.putExtra(getString(R.string.personIDForIntent), mEventModel.getPerson());
+
+            startActivity(intent);
         }
 
         public void bind(EventModel eventModel)
@@ -317,7 +324,12 @@ public class PersonActivity extends AppCompatActivity
         @Override
         public void onClick(View view)
         {
-            Toast.makeText(getBaseContext(), relativeModel.getPersonID(), Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getBaseContext(), relativeModel.getPersonID(), Toast.LENGTH_SHORT).show();
+
+            Intent intent = new Intent(PersonActivity.this, PersonActivity.class);
+            intent.putExtra(getString(R.string.personIDForIntent), relativeModel.getPersonID());
+
+            startActivity(intent);
         }
 
         public void bind(PersonModel personModel)

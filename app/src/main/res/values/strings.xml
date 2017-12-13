@@ -22,7 +22,7 @@
     <string name="menu_options_settings">Settings</string>
     <string name="personIDForIntent">personID</string>
     <string name="title_activity_settings">Settings</string>
-
+    <string name="eventIDForMapActivity">EventID</string>
     <!-- Strings related to Settings -->
 
     <!-- Example General settings -->

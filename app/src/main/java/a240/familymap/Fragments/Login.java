@@ -15,6 +15,8 @@ import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.GoogleMap;
+
 import java.util.List;
 
 import a240.familymap.Activities.AppData;
@@ -88,6 +90,7 @@ public class Login extends android.support.v4.app.Fragment implements LoginTask.
         appData.setShowFamilyTreeLines(true);
         appData.setShowLifeStoryLine(true);
         appData.setShowSpouseLines(true);
+        appData.setMaptype(GoogleMap.MAP_TYPE_NORMAL);
     }
 
     @Override
