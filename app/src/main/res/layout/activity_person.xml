@@ -98,12 +98,45 @@
                 android:layout_marginTop="5dp"/>
 
         </ExpandableListView-->
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/lifeEventsList"
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="245dp"
-            android:layout_marginTop="5dp"/>
+            android:layout_height="wrap_content"
+            android:fillViewport="true">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
+                <com.joanzapata.iconify.widget.IconTextView
+                    android:id="@+id/expand_events_header"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:onClick="toggleEventsListVisibility"
+                    android:text="{fa-compress} Life Events"/>
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/lifeEventsList"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"/>
+<!--android:layout_height="245dp"-->
+
+                <com.joanzapata.iconify.widget.IconTextView
+                    android:id="@+id/expand_relatives_header"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:onClick="toggleRelativeListVisibility"
+                    android:text="{fa-compress} Relatives"/>
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/relativesList"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+<!--android:layout_height="match_parent"-->
+
+            </LinearLayout>
+        </ScrollView>
     </LinearLayout>
 </FrameLayout>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:id="@+id/relativeListItemOuterLayout"
+              android:layout_width="match_parent"
+              android:layout_height="36dp"
+              android:orientation="horizontal">
+
+    <com.joanzapata.iconify.widget.IconTextView
+        android:id="@+id/relativeGenderIcon"
+        android:layout_width="66dp"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="{fa-male 25dp}"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/relativeNameText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="First Last"
+            android:textColor="@android:color/black"
+            />
+
+        <TextView
+            android:id="@+id/relativeRelationShip"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Relationship"
+            android:textColor="@android:color/black"/>
+    </LinearLayout>
+
+</LinearLayout>
