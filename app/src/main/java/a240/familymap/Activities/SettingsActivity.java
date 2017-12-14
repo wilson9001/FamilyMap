@@ -2,8 +2,10 @@ package a240.familymap.Activities;
 
 import android.content.Intent;
 import android.support.v4.content.IntentCompat;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -27,6 +29,10 @@ public class SettingsActivity extends AppCompatActivity implements SyncTask.Cont
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
+
+        ActionBar actionBar = getSupportActionBar();
+
+        actionBar.setDisplayHomeAsUpEnabled(true);
 
         final AppData appData = AppData.getInstance();
 
@@ -293,11 +299,7 @@ public class SettingsActivity extends AppCompatActivity implements SyncTask.Cont
                 }
             }
 
-            //TODO: Resolve bug when going from personActivity to mapActivity after transferring to new person through personActivity.
-            //TODO: Redraw lines automatically when going back to main activity.
-            //TODO: Implement filter and then search Activities.
             //TODO: Create up button
-            //TODO: Implement resync and Logout
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView)
@@ -340,5 +342,11 @@ public class SettingsActivity extends AppCompatActivity implements SyncTask.Cont
         {
             Toast.makeText(this, "Sync failed!", Toast.LENGTH_LONG).show();
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        return super.onOptionsItemSelected(item);
     }
 }

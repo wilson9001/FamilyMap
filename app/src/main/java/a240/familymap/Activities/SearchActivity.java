@@ -1,11 +1,13 @@
 package a240.familymap.Activities;
 
 import android.content.Intent;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -38,6 +40,10 @@ public class SearchActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
+
+        ActionBar actionBar = getSupportActionBar();
+
+        actionBar.setDisplayHomeAsUpEnabled(true);
 
         lifeEventsView = findViewById(R.id.lifeEventsList);
 
@@ -76,7 +82,7 @@ public class SearchActivity extends AppCompatActivity
             {
                 personIDs.addAll(appData.getPaternalAncestorIDs());
             }
-            if (eventTypesToShow.contains(AppData.mothersideFilterTitle)) ;
+            if (eventTypesToShow.contains(AppData.mothersideFilterTitle))
             {
                 personIDs.addAll(appData.getMaternalAncestorIDs());
             }
@@ -424,5 +430,11 @@ public class SearchActivity extends AppCompatActivity
         {
             return people.size();
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        return super.onOptionsItemSelected(item);
     }
 }

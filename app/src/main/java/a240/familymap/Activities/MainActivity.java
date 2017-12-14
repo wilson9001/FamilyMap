@@ -138,9 +138,20 @@ public class MainActivity extends AppCompatActivity implements Login.OnFragmentI
         {
             isMapFragment = true;
 
-            //eventTypesToShow = appData.getEventTypesToShow();
+            FragmentManager fragmentManager = getSupportFragmentManager();
 
-            onMapReady(mMap);
+            Fragment fragmentTest = fragmentManager.findFragmentById(R.id.mapFragmentContainer);
+
+            if(fragmentTest == null)
+            {
+                mapFragment = new test();
+                fragmentManager.beginTransaction().add(R.id.fragmentContainer, mapFragment).commit();
+            }
+            else
+            //eventTypesToShow = appData.getEventTypesToShow();
+            {
+                onMapReady(mMap);
+            }
 
             invalidateOptionsMenu();
         }
@@ -202,7 +213,7 @@ public class MainActivity extends AppCompatActivity implements Login.OnFragmentI
 
         mMap.clear();
 
-        View mapFragmentView = mapFragment.getView();
+        View mapFragmentView = mapFragment.getView();//
 
         TextView eventInfo = mapFragmentView.findViewById(R.id.eventInfoText);
 

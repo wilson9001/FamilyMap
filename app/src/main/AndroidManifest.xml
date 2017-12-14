@@ -48,6 +48,7 @@
             android:label="Family Map">
         </activity>
         <activity android:name=".Activities.PersonActivity"
+                  android:parentActivityName=".Activities.MainActivity"
             android:label="Person Details">
         </activity>
         <activity

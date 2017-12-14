@@ -265,15 +265,5 @@ public class FilterActivity extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item)
     {
         return super.onOptionsItemSelected(item);
-
-        /*Intent intent = new Intent(this, MainActivity.class);
-
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-
-        startActivity(intent);
-
-        finish();
-
-        return true;*/
     }
 }
