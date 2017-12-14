@@ -102,7 +102,27 @@ public class SyncTask extends AsyncTask</*String*/Boolean, Void, /*Pair<List<Per
                 appData.setMaternalAncestorIDs(new ArrayList<String>());
                 appData.setPaternalAncestorIDs(new ArrayList<String>());
 
-                partitionParentalAncestors(userPerson.getFather(), userPerson.getMother());
+                String paternalID = userPerson.getFather();
+                String maternalID = userPerson.getMother();
+
+                if(paternalID != null)
+                {
+                    appData.getPaternalAncestorIDs().add(paternalID);
+
+                    PersonModel father = personIDToPerson.get(paternalID);
+
+                    partitionParentalAncestors(father.getFather(), father.getMother(), true);
+                }
+                if(maternalID != null)
+                {
+                    appData.getMaternalAncestorIDs().add(maternalID);
+
+                    PersonModel mother = personIDToPerson.get(maternalID);
+
+                    partitionParentalAncestors(mother.getFather(), mother.getMother(), false);
+                }
+
+                //partitionParentalAncestors(userPerson.getFather(), userPerson.getMother());
 
                 return getEventsFromServer();
                 //return people;
@@ -129,26 +149,42 @@ public class SyncTask extends AsyncTask</*String*/Boolean, Void, /*Pair<List<Per
         context.onSyncComplete(success);
     }
 
-    private void partitionParentalAncestors(String personIDFather, String personIDMother)
+    private void partitionParentalAncestors(String personIDFather, String personIDMother, boolean fatherSide)
     {
         AppData appData = AppData.getInstance();
 
         if(personIDFather != null)
         {
-            appData.getPaternalAncestorIDs().add(personIDFather);
+            if(fatherSide)
+            {
+                appData.getPaternalAncestorIDs().add(personIDFather);
+            }
+            else
+            {
+                appData.getMaternalAncestorIDs().add(personIDFather);
+            }
+
             HashMap<String, PersonModel> personIDToPerson = appData.getPersonIDToPersonModel();
             PersonModel father = personIDToPerson.get(personIDFather);
 
-            partitionParentalAncestors(father.getFather(), father.getMother());
+            partitionParentalAncestors(father.getFather(), father.getMother(), fatherSide);
         }
 
         if(personIDMother != null)
         {
-            appData.getMaternalAncestorIDs().add(personIDMother);
+            if(fatherSide)
+            {
+                appData.getPaternalAncestorIDs().add(personIDMother);
+            }
+            else
+            {
+                appData.getMaternalAncestorIDs().add(personIDMother);
+            }
+
             HashMap<String, PersonModel> personIDToPerson = appData.getPersonIDToPersonModel();
             PersonModel mother = personIDToPerson.get(personIDMother);
 
-            partitionParentalAncestors(mother.getFather(), mother.getMother());
+            partitionParentalAncestors(mother.getFather(), mother.getMother(), fatherSide);
         }
     }
 

@@ -90,6 +90,8 @@ public class Login extends android.support.v4.app.Fragment implements LoginTask.
         appData.setShowFamilyTreeLines(true);
         appData.setShowLifeStoryLine(true);
         appData.setShowSpouseLines(true);
+        appData.setShowMale(true);
+        appData.setShowFemale(true);
         appData.setMaptype(GoogleMap.MAP_TYPE_NORMAL);
     }
 

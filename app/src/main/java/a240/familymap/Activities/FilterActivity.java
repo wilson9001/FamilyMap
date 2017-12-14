@@ -96,13 +96,13 @@ public class FilterActivity extends AppCompatActivity
         {
             if(b)
             {
-                Toast.makeText(getBaseContext(), "Filter " + mEventType + " activated", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getBaseContext(), "Filter " + mEventType + " activated", Toast.LENGTH_SHORT).show();
                // filterSwitch.setChecked(true);
                 eventTypesToShow.add(mEventType);
             }
             else
             {
-                Toast.makeText(getBaseContext(), "Filter " + mEventType + " deactivated", Toast.LENGTH_SHORT).show();
+               // Toast.makeText(getBaseContext(), "Filter " + mEventType + " deactivated", Toast.LENGTH_SHORT).show();
                 //filterSwitch.setChecked(false);
                 eventTypesToShow.remove(mEventType);
             }

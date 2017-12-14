@@ -42,6 +42,7 @@ import com.joanzapata.iconify.fonts.TypiconsModule;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 
@@ -61,6 +62,7 @@ public class MainActivity extends AppCompatActivity implements Login.OnFragmentI
     private String personIdOfSelectedPerson;
     private GoogleMap mMap;
     private ArrayList<Polyline> linesOnMap;
+    private HashSet<String> eventTypesToShow;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -73,6 +75,9 @@ public class MainActivity extends AppCompatActivity implements Login.OnFragmentI
 
         setContentView(R.layout.activity_main);
 
+//        AppData appData = AppData.getInstance();
+
+       // eventTypesToShow = appData.getEventTypesToShow();
         //personIdOfSelectedPerson = null;
 
         //FragmentManager fragmentManager = getSupportFragmentManager();
@@ -133,6 +138,10 @@ public class MainActivity extends AppCompatActivity implements Login.OnFragmentI
         {
             isMapFragment = true;
 
+            //eventTypesToShow = appData.getEventTypesToShow();
+
+            onMapReady(mMap);
+
             invalidateOptionsMenu();
         }
     }
@@ -191,46 +200,85 @@ public class MainActivity extends AppCompatActivity implements Login.OnFragmentI
     {
         mMap = googleMap;
 
+        mMap.clear();
+
+        View mapFragmentView = mapFragment.getView();
+
+        TextView eventInfo = mapFragmentView.findViewById(R.id.eventInfoText);
+
+        eventInfo.setText("Select a marker to\nsee event details");
+
+        TextView genderIcon = mapFragmentView.findViewById(R.id.genderIcon);
+
+        genderIcon.setText("{fa-android 35dp}");
+
+        AppData appdata = AppData.getInstance();
+
+        mMap.setMapType(appdata.getMaptype());
+
+        eventTypesToShow = appdata.getEventTypesToShow();
+
         //mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
 
         LatLng nextMarker;
 
-        AppData appdata = AppData.getInstance();
-
-        HashMap<String, ArrayList<EventModel>> personIDtoFilteredEvents = appdata.getPersonIDToFilteredEvents();
+        //HashMap<String, ArrayList<EventModel>> personIDtoFilteredEvents = appdata.getPersonIDToFilteredEvents();
+        HashMap<String, ArrayList<EventModel>> personIDtoEvents = appdata.getPersonIDtoEvents();
 
         String eventType;
-        Set<String> personIDs = personIDtoFilteredEvents.keySet();
+        //Set<String> personIDs = personIDtoFilteredEvents.keySet();
+        ArrayList<String> personIDs = new ArrayList<>();
         Marker eventMarker;
         HashMap<String, Float> eventTypeToColor = appdata.getEventTypeColor();
+        HashMap<String, PersonModel> personIdToPersonModel = appdata.getPersonIDToPersonModel();
+
         Float markerColor;
         /*PolylineOptions polylineOptions;
         int lineColor;
         Random random = new Random();*/
 
+        if(eventTypesToShow.contains(AppData.fatherSideFilterTitle))//////////////////////
+        {
+            personIDs.addAll(appdata.getPaternalAncestorIDs());
+        }
+        if(eventTypesToShow.contains(AppData.mothersideFilterTitle))
+        {
+            personIDs.addAll(appdata.getMaternalAncestorIDs());
+        }
+
+        PersonModel person;
+
         for(String personID : personIDs )
         {
-            ArrayList<EventModel> eventsForPerson = personIDtoFilteredEvents.get(personID);
+            person = personIdToPersonModel.get(personID);
 
-           // lineColor = random.nextInt(/*0xffffffff*/);
-
-            //polylineOptions = new PolylineOptions().clickable(false).color(lineColor);
-
-            for(EventModel events : eventsForPerson)
+            if((person.getGender().equals("m") && eventTypesToShow.contains(AppData.maleEventsFilterTitle) || (person.getGender().equals("f") && eventTypesToShow.contains(AppData.femaleEventsFilterTitle))))
             {
-                nextMarker = new LatLng(events.getLatitude(), events.getLongitude());
+                //ArrayList<EventModel> eventsForPerson = personIDtoFilteredEvents.get(personID);
+                ArrayList<EventModel> eventsForPerson = personIDtoEvents.get(personID);
 
-               // polylineOptions.add(nextMarker);
+                // lineColor = random.nextInt(/*0xffffffff*/);
 
-                eventType = events.getEventType();
+                //polylineOptions = new PolylineOptions().clickable(false).color(lineColor);
 
-                markerColor = eventTypeToColor.get(eventType.toLowerCase());
-                eventMarker = mMap.addMarker(new MarkerOptions()
-                        .position(nextMarker)
-                        .icon(BitmapDescriptorFactory.defaultMarker(markerColor)));
-                eventMarker.setTag(events);
+                for (EventModel events : eventsForPerson)
+                {
+                    if(eventTypesToShow.contains(events.getEventType().toLowerCase()))
+                    {
+                        eventType = events.getEventType();
+
+                        nextMarker = new LatLng(events.getLatitude(), events.getLongitude());
+
+                        // polylineOptions.add(nextMarker);
+
+                        markerColor = eventTypeToColor.get(eventType.toLowerCase());
+                        eventMarker = mMap.addMarker(new MarkerOptions()
+                                .position(nextMarker)
+                                .icon(BitmapDescriptorFactory.defaultMarker(markerColor)));
+                        eventMarker.setTag(events);
+                    }
+                }
             }
-
            // mMap.addPolyline(polylineOptions);
         }
 
@@ -302,7 +350,8 @@ public class MainActivity extends AppCompatActivity implements Login.OnFragmentI
 
        personIdOfSelectedPerson = personID;
 
-        HashMap<String, ArrayList<EventModel>> personIDToEvents = appData.getPersonIDToFilteredEvents();
+        //HashMap<String, ArrayList<EventModel>> personIDToEvents = appData.getPersonIDToFilteredEvents();
+        HashMap<String, ArrayList<EventModel>> personIDToEvents = appData.getPersonIDtoEvents();
 
         if(appData.isShowLifeStoryLine())
         {
@@ -314,8 +363,11 @@ public class MainActivity extends AppCompatActivity implements Login.OnFragmentI
 
             for(EventModel event : events)
             {
-                latLng = new LatLng(event.getLatitude(), event.getLongitude());
-                polylineOptions.add(latLng);
+                if(eventTypesToShow.contains(event.getEventType().toLowerCase()))
+                {
+                    latLng = new LatLng(event.getLatitude(), event.getLongitude());
+                    polylineOptions.add(latLng);
+                }
             }
 
             linesOnMap.add(mMap.addPolyline(polylineOptions));
@@ -326,19 +378,30 @@ public class MainActivity extends AppCompatActivity implements Login.OnFragmentI
 
             PersonModel spouseModel = personIDToPersonModel.get(spouseID);
 
-            if(spouseModel != null)
+            if((appData.isShowMale() && spouseModel.getGender().equals("m")) || (appData.isShowFemale() && spouseModel.getGender().equals("f")))
             {
-                ArrayList<EventModel> events = personIDToEvents.get(personID);
-
-                if(events != null)
+                if (spouseModel != null)
                 {
-                    EventModel earliestEvent = events.get(0);
+                    ArrayList<EventModel> events = personIDToEvents.get(personID);
 
-                    if(earliestEvent != null)
+                    if (events != null)
                     {
-                        LatLng latLng = new LatLng(eventModel.getLatitude(), eventModel.getLongitude());
-                        LatLng latLng1 = new LatLng(earliestEvent.getLatitude(), earliestEvent.getLongitude());
-                        linesOnMap.add(mMap.addPolyline(new PolylineOptions().clickable(false).color(appData.getSpouseLineColor()).add(latLng).add(latLng1)));
+                        EventModel earliestEvent = null;
+                        for(int i = 0; i < events.size(); i++)
+                        {
+                            if(eventTypesToShow.contains(events.get(i).getEventType()))
+                            {
+                                earliestEvent = events.get(i);
+                            }
+                        }
+                        //EventModel earliestEvent = events.get(0);
+
+                        if (earliestEvent != null)
+                        {
+                            LatLng latLng = new LatLng(eventModel.getLatitude(), eventModel.getLongitude());
+                            LatLng latLng1 = new LatLng(earliestEvent.getLatitude(), earliestEvent.getLongitude());
+                            linesOnMap.add(mMap.addPolyline(new PolylineOptions().clickable(false).color(appData.getSpouseLineColor()).add(latLng).add(latLng1)));
+                        }
                     }
                 }
             }
@@ -372,47 +435,71 @@ public class MainActivity extends AppCompatActivity implements Login.OnFragmentI
         String fatherID = personModel.getFather();
         String motherID = personModel.getMother();
 
-        HashMap<String, ArrayList<EventModel>> personIdToEvents = appData.getPersonIDToFilteredEvents();
+        //HashMap<String, ArrayList<EventModel>> personIdToEvents = appData.getPersonIDToFilteredEvents();
+        HashMap<String, ArrayList<EventModel>> personIdToEvents = appData.getPersonIDtoEvents();
 
         if(fatherID != null)
         {
-            ArrayList<EventModel> events = personIdToEvents.get(fatherID);
-
-            if(events != null)
+            if(appData.isShowMale())
             {
-                EventModel earliestEvent = events.get(0);
+                ArrayList<EventModel> events = personIdToEvents.get(fatherID);
 
-                if(earliestEvent != null)
+                if (events != null)
                 {
-                    linesOnMap.add(mMap.addPolyline(new PolylineOptions()
-                            .color(appData.getFamilyTreeLineColor())
-                            .clickable(false)
-                            .width(lineThickness)
-                            .add(new LatLng(seedEvent.getLatitude(), seedEvent.getLongitude()))
-                            .add(new LatLng(earliestEvent.getLatitude(), earliestEvent.getLongitude()))));
+                    EventModel earliestEvent = null;
+                    for(int i = 0; i < events.size(); i++)
+                    {
+                        if(eventTypesToShow.contains(events.get(i).getEventType()))
+                        {
+                            earliestEvent = events.get(i);
+                        }
+                    }
+                    //EventModel earliestEvent = events.get(0);
 
-                    addRecursiveAncestorPolyLines(earliestEvent, lineThickness);
+                    if (earliestEvent != null)
+                    {
+                        linesOnMap.add(mMap.addPolyline(new PolylineOptions()
+                                .color(appData.getFamilyTreeLineColor())
+                                .clickable(false)
+                                .width(lineThickness)
+                                .add(new LatLng(seedEvent.getLatitude(), seedEvent.getLongitude()))
+                                .add(new LatLng(earliestEvent.getLatitude(), earliestEvent.getLongitude()))));
+
+                        addRecursiveAncestorPolyLines(earliestEvent, lineThickness);
+                    }
                 }
             }
         }
+
         if(motherID != null)
         {
-            ArrayList<EventModel> events = personIdToEvents.get(motherID);
-
-            if(events != null)
+            if(appData.isShowFemale())
             {
-                EventModel earliestEvent = events.get(0);
+                ArrayList<EventModel> events = personIdToEvents.get(motherID);
 
-                if(earliestEvent != null)
+                if (events != null)
                 {
-                    linesOnMap.add(mMap.addPolyline(new PolylineOptions()
-                            .color(appData.getFamilyTreeLineColor())
-                            .clickable(false)
-                            .width(lineThickness)
-                            .add(new LatLng(seedEvent.getLatitude(), seedEvent.getLongitude()))
-                            .add(new LatLng(earliestEvent.getLatitude(), earliestEvent.getLongitude()))));
+                    EventModel earliestEvent = null;
+                    for(int i = 0; i < events.size(); i++)
+                    {
+                        if(eventTypesToShow.contains(events.get(i).getEventType()))
+                        {
+                            earliestEvent = events.get(i);
+                        }
+                    }
+                    //EventModel earliestEvent = events.get(0);
 
-                    addRecursiveAncestorPolyLines(earliestEvent, lineThickness);
+                    if (earliestEvent != null)
+                    {
+                        linesOnMap.add(mMap.addPolyline(new PolylineOptions()
+                                .color(appData.getFamilyTreeLineColor())
+                                .clickable(false)
+                                .width(lineThickness)
+                                .add(new LatLng(seedEvent.getLatitude(), seedEvent.getLongitude()))
+                                .add(new LatLng(earliestEvent.getLatitude(), earliestEvent.getLongitude()))));
+
+                        addRecursiveAncestorPolyLines(earliestEvent, lineThickness);
+                    }
                 }
             }
         }

@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 import a240.familymap.Models.EventModel;
@@ -29,6 +30,8 @@ public class PersonActivity extends AppCompatActivity
     //private TextView expandableEventsText, expandableRelativesText;
     private String personID;
     //private ArrayList<EventModel> Events;
+
+    HashSet<String> eventTypesToShow;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -94,15 +97,35 @@ public class PersonActivity extends AppCompatActivity
     {
         AppData appData = AppData.getInstance();
 
-        HashMap<String, ArrayList<EventModel>> personIDToFilteredEvents = appData.getPersonIDToFilteredEvents();
+        //HashMap<String, ArrayList<EventModel>> personIDToFilteredEvents = appData.getPersonIDToFilteredEvents();
+        HashMap<String, ArrayList<EventModel>> personIDToEvents = appData.getPersonIDtoEvents();
         HashMap<String, PersonModel> personIdToPersonModel = appData.getPersonIDToPersonModel();
 
-        ArrayList<EventModel> Events = personIDToFilteredEvents.get(personID);
+        eventTypesToShow = appData.getEventTypesToShow();
+
+        //ArrayList<EventModel> Events = personIDToFilteredEvents.get(personID);
+        ArrayList<EventModel> unFilteredEvents = personIDToEvents.get(personID);
+        ArrayList<EventModel> Events = new ArrayList<>();
+
+        PersonModel mainPerson = personIdToPersonModel.get(personID);
+
+        if((eventTypesToShow.contains(AppData.fatherSideFilterTitle) && appData.getPaternalAncestorIDs().contains(personID)) || (eventTypesToShow.contains(AppData.mothersideFilterTitle) && appData.getMaternalAncestorIDs().contains(personID)))
+        {
+            if((appData.isShowMale() && mainPerson.getGender().equals("m")) || (appData.isShowFemale() && mainPerson.getGender().equals("f")))
+            {
+                for(EventModel eventsIterator : unFilteredEvents)
+                {
+                    if(eventTypesToShow.contains(eventsIterator.getEventType().toLowerCase()))
+                    {
+                        Events.add(eventsIterator);
+                    }
+                }
+            }
+        }
+
         ArrayList<PersonModel> relatives = new ArrayList<>();
 
         String fatherID, motherID, spouseID;
-
-        PersonModel mainPerson = personIdToPersonModel.get(personID);
 
         fatherID = mainPerson.getFather();
         motherID = mainPerson.getMother();
@@ -124,10 +147,10 @@ public class PersonActivity extends AppCompatActivity
             relatives.add(spouse);
         }
 
-        if(Events == null)
+        /*if(Events == null)
         {
             Events = new ArrayList<>();
-        }
+        }*/
 
         //HashMap<String, PersonModel> personIdToPersonModel = appData.getPersonIDToPersonModel();
 
