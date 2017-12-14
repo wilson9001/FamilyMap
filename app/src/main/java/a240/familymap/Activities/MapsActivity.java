@@ -80,7 +80,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-        fragmentTransaction.add(R.id.fragmentContainer, mapFragment);
+        fragmentTransaction.add(R.id.mapContainerForActivity, mapFragment);
+
+        //^This is probably the cause of the crashing. May need to go back to existing activity rather than start another one.
 
         //fragmentTransaction.addToBackStack(null);
 
@@ -94,9 +96,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         AppData appData = AppData.getInstance();
 
-        if(mMap.getMapType() != appData.getMaptype())
+        if(mMap!= null)
         {
-            mMap.setMapType(appData.getMaptype());
+            if (mMap.getMapType() != appData.getMaptype())
+            {
+                mMap.setMapType(appData.getMaptype());
+            }
         }
     }
 
@@ -134,6 +139,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         LatLng nextMarker;
 
         AppData appdata = AppData.getInstance();
+
+        mMap.setMapType(appdata.getMaptype());
 
         HashMap<String, ArrayList<EventModel>> personIDtoFilteredEvents = appdata.getPersonIDToFilteredEvents();
 

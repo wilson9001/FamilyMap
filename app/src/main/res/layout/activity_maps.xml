@@ -8,6 +8,6 @@
           tools:context="a240.familymap.Activities.MapsActivity"/-->
 <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@id/fragmentContainer"
+    android:id="@+id/mapContainerForActivity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"/>

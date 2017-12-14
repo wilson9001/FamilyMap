@@ -1,5 +1,7 @@
 package a240.familymap.Activities;
 
+import android.content.Intent;
+import android.support.v4.content.IntentCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -15,8 +17,9 @@ import com.google.android.gms.maps.GoogleMap;
 import java.util.ArrayList;
 
 import a240.familymap.R;
+import a240.familymap.Tasks.SyncTask;
 
-public class SettingsActivity extends AppCompatActivity //implements AdapterView.OnItemSelectedListener
+public class SettingsActivity extends AppCompatActivity implements SyncTask.Context // AdapterView.OnItemSelectedListener
 {
 
     @Override
@@ -293,6 +296,8 @@ public class SettingsActivity extends AppCompatActivity //implements AdapterView
             //TODO: Resolve bug when going from personActivity to mapActivity after transferring to new person through personActivity.
             //TODO: Redraw lines automatically when going back to main activity.
             //TODO: Implement filter and then search Activities.
+            //TODO: Create up button
+            //TODO: Implement resync and Logout
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView)
@@ -304,10 +309,36 @@ public class SettingsActivity extends AppCompatActivity //implements AdapterView
     public void resync(View v)
     {
         Toast.makeText(this, "Resync started", Toast.LENGTH_LONG).show();
+
+        SyncTask syncTask = new SyncTask(this);
+
+        syncTask.execute(false);
     }
 
     public void logout(View v)
     {
         Toast.makeText(this, "Logging out", Toast.LENGTH_SHORT).show();
+
+        AppData appData = AppData.getInstance();
+
+        appData.setServerHost(null);
+
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+        finish();
+    }
+
+    @Override
+    public void onSyncComplete(Boolean success)
+    {
+        if(success)
+        {
+            Toast.makeText(this, "Sync complete", Toast.LENGTH_SHORT).show();
+        }
+        else
+        {
+            Toast.makeText(this, "Sync failed!", Toast.LENGTH_LONG).show();
+        }
     }
 }

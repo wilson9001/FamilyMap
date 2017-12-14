@@ -73,19 +73,61 @@ public class MainActivity extends AppCompatActivity implements Login.OnFragmentI
 
         setContentView(R.layout.activity_main);
 
-        personIdOfSelectedPerson = null;
+        //personIdOfSelectedPerson = null;
 
-        FragmentManager fragmentManager = getSupportFragmentManager();
+        //FragmentManager fragmentManager = getSupportFragmentManager();
 
-        Fragment fragment = fragmentManager.findFragmentById(R.id.fragmentContainer);
+        //Fragment fragment = fragmentManager.findFragmentById(R.id.fragmentContainer);
 
-        if(fragment == null)
-        {
-            fragment = new Login();
+        /*AppData appData = AppData.getInstance();
+
+        String hostName = appData.getServerHost();
+
+        if(hostName == null/*fragment == null*///)
+        /*{
+            Fragment fragment = new Login();
 
             isMapFragment = false;
 
             fragmentManager.beginTransaction().add(R.id.fragmentContainer, fragment).commit();
+        }
+        else
+        {
+            isMapFragment = true;
+
+            invalidateOptionsMenu();
+        }*/
+    }
+
+    @Override
+    public void onStart()
+    {
+        personIdOfSelectedPerson = null;
+
+        super.onStart();
+
+        AppData appData = AppData.getInstance();
+
+        String hostName = appData.getServerHost();
+
+        if(hostName == null/*fragment == null*/)
+        {
+            Fragment fragment = new Login();
+
+            isMapFragment = false;
+
+            FragmentManager fragmentManager = getSupportFragmentManager();
+
+            Fragment fragmentTest = fragmentManager.findFragmentById(R.id.mapFragmentContainer);
+
+            if(fragmentTest == null)
+            {
+                fragmentManager.beginTransaction().add(R.id.fragmentContainer, fragment).commit();
+            }
+            else
+            {
+                fragmentManager.beginTransaction().replace(R.id.mapFragmentContainer, fragment);
+            }
         }
         else
         {
@@ -118,7 +160,8 @@ public class MainActivity extends AppCompatActivity implements Login.OnFragmentI
 
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
 
-        fragmentTransaction.replace(R.id.fragmentContainer, mapFragment);
+        //fragmentTransaction.replace(R.id.fragmentContainer, mapFragment);
+        fragmentTransaction.replace(R.id.loginOuterLayout, mapFragment);
 
         //fragmentTransaction.addToBackStack("first");
 

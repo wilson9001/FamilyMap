@@ -300,6 +300,7 @@ public class AppData
         this.showSpouseLines = showSpouseLines;
     }
 
+
    /* public HashMap<String, EventModel> getEventIDToEvent()
     {
         return eventIDToEvent;

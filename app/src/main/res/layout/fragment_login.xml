@@ -1,5 +1,6 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
              xmlns:tools="http://schemas.android.com/tools"
+             android:id="@+id/loginOuterLayout"
              android:layout_width="match_parent"
              android:layout_height="match_parent"
              tools:context="a240.familymap.Fragments.Login">
@@ -177,10 +178,10 @@
             <!--android:textColor="@color/textPrimary"-->
 
             <RadioGroup
+                android:id="@+id/genderRadio"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:id="@+id/genderRadio">
+                android:orientation="horizontal">
 
                 <RadioButton
                     android:id="@+id/maleRadio"
@@ -205,8 +206,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal"
         android:gravity="bottom"
+        android:orientation="horizontal"
         android:paddingBottom="50dp">
 
         <Button
