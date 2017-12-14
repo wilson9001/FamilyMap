@@ -465,13 +465,15 @@ public class MainActivity extends AppCompatActivity implements Login.OnFragmentI
                 Toast.makeText(this, "Search Item Called", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.filter_menuItem:
-                Toast.makeText(this, "Filter item called", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(this, "Filter item called", Toast.LENGTH_SHORT).show();
+                Intent intent1 = new Intent(MainActivity.this, FilterActivity.class);
+                startActivity(intent1);
                 break;
             case R.id.settings_menuItem:
                 //Toast.makeText(this, "Settings item called", Toast.LENGTH_SHORT).show();
 
-                Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
-                startActivity(intent);
+                Intent intent2 = new Intent(MainActivity.this, SettingsActivity.class);
+                startActivity(intent2);
                 break;
             default:
                 return super.onOptionsItemSelected(item);

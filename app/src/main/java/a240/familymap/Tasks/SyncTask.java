@@ -211,6 +211,11 @@ public class SyncTask extends AsyncTask</*String*/Boolean, Void, /*Pair<List<Per
                 allEventTypes.add(event.getEventType().toLowerCase());
             }
 
+            allEventTypes.add(AppData.fatherSideFilterTitle);
+            allEventTypes.add(AppData.mothersideFilterTitle);
+            allEventTypes.add(AppData.maleEventsFilterTitle);
+            allEventTypes.add(AppData.femaleEventsFilterTitle);
+
             Set<String> personIDSet = PersonIDToEvents.keySet();
             ArrayList<EventModel> eventsForPerson;
             ArrayList<EventModel> birthAndDeath;

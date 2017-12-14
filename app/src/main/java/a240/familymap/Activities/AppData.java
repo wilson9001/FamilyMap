@@ -38,6 +38,11 @@ public class AppData
     public static final String[] COLORS = {"Black", "White", "Green", "Purple", "Orange", "Blue"};
     public static final String[] MapTypes = {"Normal", "Hybrid", "Satellite", "Terrain"};
 
+    public static final String fatherSideFilterTitle = "Father's Side";
+    public static final String mothersideFilterTitle = "Mother's Side";
+    public static final String maleEventsFilterTitle = "Male Events";
+    public static final String femaleEventsFilterTitle = "Female Events";
+
     private int maptype;
 
     private String serverHost, authToken, userPersonID;

@@ -20,6 +20,7 @@
             android:id="@+id/ListEventInfo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:inputType="textCapWords"
             android:text="Event Info"
             android:textColor="@android:color/black"/>
 

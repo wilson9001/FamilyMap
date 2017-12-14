@@ -26,7 +26,7 @@ public class PersonActivity extends AppCompatActivity
     private RecyclerView lifeEventsView, relativesView;
     private eventAdapter mEventAdapter;
     private relativeAdapter mRelativeAdapter;
-    private TextView expandableEventsText, expandableRelativesText;
+    //private TextView expandableEventsText, expandableRelativesText;
     private String personID;
     //private ArrayList<EventModel> Events;
 
