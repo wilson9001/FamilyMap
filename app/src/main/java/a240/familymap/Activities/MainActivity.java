@@ -549,7 +549,9 @@ public class MainActivity extends AppCompatActivity implements Login.OnFragmentI
         switch(item.getItemId())
         {
             case R.id.search_menuItem:
-                Toast.makeText(this, "Search Item Called", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(this, "Search Item Called", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(MainActivity.this, SearchActivity.class);
+                startActivity(intent);
                 break;
             case R.id.filter_menuItem:
                 //Toast.makeText(this, "Filter item called", Toast.LENGTH_SHORT).show();

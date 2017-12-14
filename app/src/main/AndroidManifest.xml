@@ -44,15 +44,26 @@
 
         <activity
             android:name=".Activities.MapsActivity"
-            android:label="@string/title_activity_maps">
+            android:parentActivityName=".Activities.MainActivity"
+            android:label="Family Map">
         </activity>
-        <activity android:name=".Activities.PersonActivity">
+        <activity android:name=".Activities.PersonActivity"
+            android:label="Person Details">
         </activity>
         <activity
             android:name=".Activities.SettingsActivity"
+            android:parentActivityName=".Activities.MainActivity"
             android:label="@string/title_activity_settings">
         </activity>
-        <activity android:name=".Activities.FilterActivity">
+        <activity
+            android:name=".Activities.FilterActivity"
+            android:label="Filter"
+            android:parentActivityName=".Activities.MainActivity">
+        </activity>
+        <activity
+            android:name=".Activities.SearchActivity"
+            android:parentActivityName=".Activities.MainActivity"
+            android:label="Search">
         </activity>
     </application>
 

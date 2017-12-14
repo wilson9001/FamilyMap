@@ -26,6 +26,7 @@ import com.joanzapata.iconify.fonts.TypiconsModule;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Set;
 
 import a240.familymap.Fragments.test;
@@ -40,6 +41,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private GoogleMap mMap;
     private ArrayList<Polyline> linesOnMap;
     private String personIdOfSelectedPerson;
+    private HashSet<String> eventTypesToShow;
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -61,7 +63,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         AppData appData = AppData.getInstance();
 
-        HashMap<String, ArrayList<EventModel>> personIDToEventModels = appData.getPersonIDToFilteredEvents();
+        HashMap<String, ArrayList<EventModel>> personIDToEventModels = appData.getPersonIDtoEvents();
 
         ArrayList<EventModel> eventModels = personIDToEventModels.get(personIdOfSelectedPerson);
 
@@ -142,44 +144,68 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         mMap.setMapType(appdata.getMaptype());
 
-        HashMap<String, ArrayList<EventModel>> personIDtoFilteredEvents = appdata.getPersonIDToFilteredEvents();
+        eventTypesToShow = appdata.getEventTypesToShow();
+
+
+       // HashMap<String, ArrayList<EventModel>> personIDtoFilteredEvents = appdata.getPersonIDToFilteredEvents();
+       HashMap<String, ArrayList<EventModel>> personIDtoEvents = appdata.getPersonIDtoEvents();
 
         String eventType;
-        Set<String> personIDs = personIDtoFilteredEvents.keySet();
+        //Set<String> personIDs = personIDtoEvents.keySet();
+        ArrayList<String> personIDs = new ArrayList<>();
         Marker eventMarker;
         HashMap<String, Float> eventTypeToColor = appdata.getEventTypeColor();
         Float markerColor;
 
         Marker selectedMarker = null;
 
+        if(eventTypesToShow.contains(AppData.fatherSideFilterTitle))
+        {
+            personIDs.addAll(appdata.getPaternalAncestorIDs());
+        }
+        if(eventTypesToShow.contains(AppData.mothersideFilterTitle))
+        {
+            personIDs.addAll(appdata.getMaternalAncestorIDs());
+        }
+
+        PersonModel person;
+        HashMap<String, PersonModel> personIdToPerson = appdata.getPersonIDToPersonModel();
+
         for(String personID : personIDs )
         {
-            ArrayList<EventModel> eventsForPerson = personIDtoFilteredEvents.get(personID);
+            person = personIdToPerson.get(personID);
 
-            // lineColor = random.nextInt(/*0xffffffff*/);
-
-            //polylineOptions = new PolylineOptions().clickable(false).color(lineColor);
-
-            for(EventModel events : eventsForPerson)
+            if((appdata.isShowMale() && person.getGender().equals("m")) || (appdata.isShowFemale() && person.getGender().equals("f")))
             {
-                nextMarker = new LatLng(events.getLatitude(), events.getLongitude());
+                ArrayList<EventModel> eventsForPerson = personIDtoEvents.get(personID);
 
-                // polylineOptions.add(nextMarker);
+                // lineColor = random.nextInt(/*0xffffffff*/);
 
-                eventType = events.getEventType();
+                //polylineOptions = new PolylineOptions().clickable(false).color(lineColor);
 
-                markerColor = eventTypeToColor.get(eventType.toLowerCase());
-                eventMarker = mMap.addMarker(new MarkerOptions()
-                        .position(nextMarker)
-                        .icon(BitmapDescriptorFactory.defaultMarker(markerColor)));
-                eventMarker.setTag(events);
-
-                if(events.getEventID().equals(EntryEvent.getEventID()))
+                for (EventModel events : eventsForPerson)
                 {
-                    selectedMarker = eventMarker;
+                    if(eventTypesToShow.contains(events.getEventType().toLowerCase()))
+                    {
+                        nextMarker = new LatLng(events.getLatitude(), events.getLongitude());
+
+                        // polylineOptions.add(nextMarker);
+
+                        eventType = events.getEventType();
+
+                        markerColor = eventTypeToColor.get(eventType.toLowerCase());
+                        eventMarker = mMap.addMarker(new MarkerOptions()
+                                .position(nextMarker)
+                                .icon(BitmapDescriptorFactory.defaultMarker(markerColor)));
+                        eventMarker.setTag(events);
+
+                        if (events.getEventID().equals(EntryEvent.getEventID()))
+                        {
+                            selectedMarker = eventMarker;
+                        }
+                    }
                 }
             }
-
             // mMap.addPolyline(polylineOptions);
         }
 
@@ -256,7 +282,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         personIdOfSelectedPerson = personID;
 
-        HashMap<String, ArrayList<EventModel>> personIDToEvents = appData.getPersonIDToFilteredEvents();
+        //HashMap<String, ArrayList<EventModel>> personIDToEvents = appData.getPersonIDToFilteredEvents();
+        HashMap<String, ArrayList<EventModel>> personIDToEvents = appData.getPersonIDtoEvents();
 
         if(appData.isShowLifeStoryLine())
         {
@@ -268,8 +295,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
             for(EventModel event : events)
             {
-                latLng = new LatLng(event.getLatitude(), event.getLongitude());
-                polylineOptions.add(latLng);
+                if(eventTypesToShow.contains(event.getEventType().toLowerCase()))
+                {
+                    latLng = new LatLng(event.getLatitude(), event.getLongitude());
+                    polylineOptions.add(latLng);
+                }
             }
 
             linesOnMap.add(mMap.addPolyline(polylineOptions));
@@ -280,19 +310,30 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
             PersonModel spouseModel = personIDToPersonModel.get(spouseID);
 
-            if(spouseModel != null)
+            if((appData.isShowMale() && spouseModel.getGender().equals("m")) || (appData.isShowFemale() && spouseModel.getGender().equals("f")))
             {
-                ArrayList<EventModel> events = personIDToEvents.get(personID);
-
-                if(events != null)
+                if (spouseModel != null)
                 {
-                    EventModel earliestEvent = events.get(0);
+                    ArrayList<EventModel> events = personIDToEvents.get(personID);
 
-                    if(earliestEvent != null)
+                    if (events != null)
                     {
-                        LatLng latLng = new LatLng(eventModel.getLatitude(), eventModel.getLongitude());
-                        LatLng latLng1 = new LatLng(earliestEvent.getLatitude(), earliestEvent.getLongitude());
-                        linesOnMap.add(mMap.addPolyline(new PolylineOptions().clickable(false).color(appData.getSpouseLineColor()).add(latLng).add(latLng1)));
+                        EventModel earliestEvent = null;
+                        for(int i = 0; i < events.size(); i++)
+                        {
+                            if(eventTypesToShow.contains(events.get(i).getEventType()))
+                            {
+                                earliestEvent = events.get(i);
+                            }
+                        }
+                        //EventModel earliestEvent = events.get(0);
+
+                        if (earliestEvent != null)
+                        {
+                            LatLng latLng = new LatLng(eventModel.getLatitude(), eventModel.getLongitude());
+                            LatLng latLng1 = new LatLng(earliestEvent.getLatitude(), earliestEvent.getLongitude());
+                            linesOnMap.add(mMap.addPolyline(new PolylineOptions().clickable(false).color(appData.getSpouseLineColor()).add(latLng).add(latLng1)));
+                        }
                     }
                 }
             }
@@ -326,47 +367,71 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         String fatherID = personModel.getFather();
         String motherID = personModel.getMother();
 
-        HashMap<String, ArrayList<EventModel>> personIdToEvents = appData.getPersonIDToFilteredEvents();
+        //HashMap<String, ArrayList<EventModel>> personIdToEvents = appData.getPersonIDToFilteredEvents();
+        HashMap<String, ArrayList<EventModel>> personIdToEvents = appData.getPersonIDtoEvents();
 
         if(fatherID != null)
         {
-            ArrayList<EventModel> events = personIdToEvents.get(fatherID);
-
-            if(events != null)
+            if(appData.isShowMale())
             {
-                EventModel earliestEvent = events.get(0);
+                ArrayList<EventModel> events = personIdToEvents.get(fatherID);
 
-                if(earliestEvent != null)
+                if (events != null)
                 {
-                    linesOnMap.add(mMap.addPolyline(new PolylineOptions()
-                            .color(appData.getFamilyTreeLineColor())
-                            .clickable(false)
-                            .width(lineThickness)
-                            .add(new LatLng(seedEvent.getLatitude(), seedEvent.getLongitude()))
-                            .add(new LatLng(earliestEvent.getLatitude(), earliestEvent.getLongitude()))));
+                    EventModel earliestEvent = null;
+                    for(int i = 0; i < events.size(); i++)
+                    {
+                        if(eventTypesToShow.contains(events.get(i).getEventType()))
+                        {
+                            earliestEvent = events.get(i);
+                        }
+                    }
+                    //EventModel earliestEvent = events.get(0);
 
-                    addRecursiveAncestorPolyLines(earliestEvent, lineThickness);
+                    if (earliestEvent != null)
+                    {
+                        linesOnMap.add(mMap.addPolyline(new PolylineOptions()
+                                .color(appData.getFamilyTreeLineColor())
+                                .clickable(false)
+                                .width(lineThickness)
+                                .add(new LatLng(seedEvent.getLatitude(), seedEvent.getLongitude()))
+                                .add(new LatLng(earliestEvent.getLatitude(), earliestEvent.getLongitude()))));
+
+                        addRecursiveAncestorPolyLines(earliestEvent, lineThickness);
+                    }
                 }
             }
         }
+
         if(motherID != null)
         {
-            ArrayList<EventModel> events = personIdToEvents.get(motherID);
-
-            if(events != null)
+            if(appData.isShowFemale())
             {
-                EventModel earliestEvent = events.get(0);
+                ArrayList<EventModel> events = personIdToEvents.get(motherID);
 
-                if(earliestEvent != null)
+                if (events != null)
                 {
-                    linesOnMap.add(mMap.addPolyline(new PolylineOptions()
-                            .color(appData.getFamilyTreeLineColor())
-                            .clickable(false)
-                            .width(lineThickness)
-                            .add(new LatLng(seedEvent.getLatitude(), seedEvent.getLongitude()))
-                            .add(new LatLng(earliestEvent.getLatitude(), earliestEvent.getLongitude()))));
+                    EventModel earliestEvent = null;
+                    for(int i = 0; i < events.size(); i++)
+                    {
+                        if(eventTypesToShow.contains(events.get(i).getEventType()))
+                        {
+                            earliestEvent = events.get(i);
+                        }
+                    }
+                    //EventModel earliestEvent = events.get(0);
 
-                    addRecursiveAncestorPolyLines(earliestEvent, lineThickness);
+                    if (earliestEvent != null)
+                    {
+                        linesOnMap.add(mMap.addPolyline(new PolylineOptions()
+                                .color(appData.getFamilyTreeLineColor())
+                                .clickable(false)
+                                .width(lineThickness)
+                                .add(new LatLng(seedEvent.getLatitude(), seedEvent.getLongitude()))
+                                .add(new LatLng(earliestEvent.getLatitude(), earliestEvent.getLongitude()))));
+
+                        addRecursiveAncestorPolyLines(earliestEvent, lineThickness);
+                    }
                 }
             }
         }

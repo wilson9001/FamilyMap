@@ -1,10 +1,14 @@
 package a240.familymap.Activities;
 
+import android.content.Intent;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
@@ -36,6 +40,14 @@ public class FilterActivity extends AppCompatActivity
         filterView = findViewById(R.id.filterRecyclerView);
 
         filterView.setLayoutManager(new LinearLayoutManager(this));
+
+        //Toolbar myToolbar = findViewById(R.id.filterToolbar);
+
+        //setSupportActionBar(myToolbar);
+
+        ActionBar actionBar = getSupportActionBar();
+
+        actionBar.setDisplayHomeAsUpEnabled(true);
 
         updateUI();
     }
@@ -247,5 +259,21 @@ public class FilterActivity extends AppCompatActivity
         {
             return allEventTypes.size();
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        return super.onOptionsItemSelected(item);
+
+        /*Intent intent = new Intent(this, MainActivity.class);
+
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+        startActivity(intent);
+
+        finish();
+
+        return true;*/
     }
 }

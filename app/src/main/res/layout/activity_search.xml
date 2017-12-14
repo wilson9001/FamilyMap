@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="a240.familymap.Activities.SearchActivity"-->
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginLeft="8dp"
+    android:layout_marginRight="8dp"
+    android:orientation="vertical"
+    tools:context="a240.familymap.Activities.SearchActivity"
+    tools:layout_editor_absoluteX="8dp"
+    tools:layout_editor_absoluteY="8dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/searchActivitySearch"
+            android:layout_width="276dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textPersonName"/>
+
+        <Button
+            android:id="@+id/SearchButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Search"
+            android:onClick="updateUI"/>
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!--com.joanzapata.iconify.widget.IconTextView
+                android:id="@+id/expand_events_header"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:onClick="toggleEventsListVisibility"
+                android:text="{fa-compress} Life Events"/-->
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@id/lifeEventsList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"/>
+            <!--android:layout_height="245dp"-->
+
+            <!--com.joanzapata.iconify.widget.IconTextView
+                android:id="@+id/expand_relatives_header"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:onClick="toggleRelativeListVisibility"
+                android:text="{fa-compress} Relatives"/-->
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@id/relativesList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+            <!--android:layout_height="match_parent"-->
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>
+<!--/android.support.constraint.ConstraintLayout-->
